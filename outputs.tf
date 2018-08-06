@@ -3,3 +3,7 @@ output "ec2_ssm_role" {
   value       = "${aws_iam_instance_profile.ec2_ssm_role.name}"
 }
 
+##### temp output of arn
+output "admin_role" {
+  value = "${aws_iam_instance_profile.admin_role.arn}"
+}
