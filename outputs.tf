@@ -5,5 +5,5 @@ output "ec2_ssm_role" {
 
 ##### temp output of arn
 output "admin_role" {
-  value = "${aws_iam_instance_profile.admin_role.arn}"
+  value = "${aws_iam_role.admin_role.arn}"
 }
