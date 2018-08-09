@@ -1,7 +1,7 @@
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
-  name                = "admin_role"
+  name                = "AWLAdminRole"
   assume_role_policy  =  <<EOF
 {
   "Version": "2012-10-17",
