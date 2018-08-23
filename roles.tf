@@ -1,7 +1,7 @@
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
-  name                = "AdminRole"
+  name                = "AWLAdminRole"
   assume_role_policy  =  <<EOF
 {
   "Version": "2012-10-17",
@@ -31,7 +31,7 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
 # Standard EC2 role to be managed by SSM
 
 resource "aws_iam_role" "ec2_ssm_role" {
-  name = "ssm_role"
+  name = "SSM_Role"
 
   assume_role_policy = "${local.ec2_assume_role}"
 }
