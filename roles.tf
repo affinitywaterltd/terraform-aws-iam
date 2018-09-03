@@ -17,6 +17,13 @@ resource "aws_iam_role" "admin_role" {
           "aws:MultiFactorAuthPresent": "true"
         }
       }
+    },
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Federated": "arn:aws:iam::739672810541:saml-provider/Azure_AD"
+      },
+      "Action": "sts:AssumeRoleWithSAML"
     }
   ]
 }
@@ -39,9 +46,4 @@ resource "aws_iam_role" "ec2_ssm_role" {
 resource "aws_iam_role_policy_attachment" "ec2_ssm_role_policy_attach" {
   role = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
-}
-
-resource "aws_iam_instance_profile" "ec2_ssm_role" {
-  name = "ssm_role"                                    # Change this to remove the 2
-  role = "${aws_iam_role.ec2_ssm_role.name}"
 }
