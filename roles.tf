@@ -21,7 +21,7 @@ resource "aws_iam_role" "admin_role" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Federated": "arn:aws:iam::"${data.aws_caller_identity.current.account_id}":saml-provider/Azure_AD"
+        "Federated": "arn:aws:iam::739672810541:saml-provider/Azure_AD"
       },
       "Action": "sts:AssumeRoleWithSAML"
     }
