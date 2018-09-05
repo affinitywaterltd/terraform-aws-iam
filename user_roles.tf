@@ -34,14 +34,14 @@ data "aws_iam_policy_document" "SSO_trust" {
   }
 }
 
-resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
-  role       = "${aws_iam_role.admin_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
-}
-
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
   name               = "AWLAdminRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
+  role       = "${aws_iam_role.admin_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }

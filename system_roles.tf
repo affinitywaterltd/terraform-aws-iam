@@ -1,9 +1,25 @@
+##############
+#EC2
+##############
+
+# EC2 role policy
+data "aws_iam_policy_document" "ec2_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
 # Standard EC2 role for servers to be managed by SSM
 
 resource "aws_iam_role" "ec2_ssm_role" {
   name = "SSM_Role"
 
-  assume_role_policy = "${local.ec2_assume_role}"
+  assume_role_policy = "${data.aws_iam_policy_document.ec2_assume_role_policy.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_ssm_role_policy_attach" {

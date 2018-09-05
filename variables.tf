@@ -1,6 +1,8 @@
 # Account identity
 data "aws_caller_identity" "current" {}
 
+
+
 # EC2 role policy
 data "aws_iam_policy_document" "ec2_assume_role_policy" {
   statement {
