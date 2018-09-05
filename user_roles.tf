@@ -49,7 +49,7 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
 # SysOps Role
 
 resource "aws_iam_role" "sysops_role" {
-  name               = "AWLSysOps"
+  name               = "AWLSysOpsRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
 }
 
@@ -71,7 +71,7 @@ resource "aws_iam_role_policy_attachment" "sysops_rds_policy_attach" {
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
-  name               = "AWLDatabaseAnalyst"
+  name               = "AWLDatabaseAnalystRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
 }
 
