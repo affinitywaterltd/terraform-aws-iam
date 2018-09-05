@@ -45,3 +45,47 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
   role       = "${aws_iam_role.admin_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
+
+# SysOps Role
+
+resource "aws_iam_role" "sysops_role" {
+  name               = "AWLSysOps"
+  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_read_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_ec2full_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_rds_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+}
+
+# DBA Role
+
+resource "aws_iam_role" "dba_role" {
+  name               = "AWLDatabaseAnalyst"
+  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dba_redshift_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
+}
