@@ -25,6 +25,11 @@ data "aws_iam_policy_document" "SSO_trust" {
       type        = "AWS"
       identifiers = ["arn:aws:iam::739672810541:root"]
     }
+    condition {
+      test     = "Bool"
+      variable = "aws:MultiFactorAuthPresent"
+      values   = ["true"]
+    }
   }
 }
 
@@ -59,4 +64,3 @@ resource "aws_iam_instance_profile" "ec2_ssm_role" {
 }
 
 # 
-
