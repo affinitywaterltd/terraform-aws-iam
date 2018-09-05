@@ -7,7 +7,7 @@ data "aws_iam_policy_document" "SSO_trust" {
 
     principals {
       type        = "Federated"
-      identifiers = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:saml-provider/Azure_AD"
+      identifiers = ["arn:aws:iam::${data.aws_caller_identity.current.account_id}:saml-provider/Azure_AD"]
     }
 
     condition {
