@@ -5,7 +5,7 @@ resource "aws_iam_user" "citrix_machine_creation" {
   force_destroy      = true
 }
 
-resource "aws_iam_user_policy" "lb_ro" {
+resource "aws_iam_user_policy" "citrix_machine_creation" {
   name = "test"
   user = "${aws_iam_user.citrix_machine_creation.name}"
 
