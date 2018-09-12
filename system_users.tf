@@ -6,7 +6,7 @@ resource "aws_iam_user" "citrix_machine_creation" {
 }
 
 resource "aws_iam_user_policy" "citrix_machine_creation" {
-  name = "Citrix Machine Creation"
+  name = "CitrixMachineCreation"
   user = "${aws_iam_user.citrix_machine_creation.name}"
 
   policy = <<EOF
