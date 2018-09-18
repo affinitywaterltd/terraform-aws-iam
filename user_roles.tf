@@ -89,3 +89,31 @@ resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
+
+resource "aws_iam_policy" "dba_parametergroup_policy" {
+  name        = "DBAParameterGroup"
+  description = "Allows DBAs to create and assign parameter groups"
+
+  policy      = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": "iam:*",
+            "Effect": "Allow",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
+            "Condition": {
+                "StringLike": {
+                    "iam:AWSServiceName": "rds.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "${aws_iam_policy.arn}"
+}
