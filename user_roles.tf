@@ -115,5 +115,5 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "${aws_iam_policy.arn}"
+  policy_arn = "${aws_iam_policy.dba_parametergroup_policy.arn}"
 }
