@@ -114,7 +114,7 @@ resource "aws_iam_policy" "dba_dbmigration_policy" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachement" "dba_dms_policy_attach" {
+resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "${aws_iam_policy.dba_dbmigration_policy.arn}"
 }
