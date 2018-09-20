@@ -95,6 +95,31 @@ resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
 
+resource "aws_iam_policy" "dba_dbmigration_policy" {
+  name        = "DBAMigrationService"
+  description = "Allows DBAs to use Database Migration Service"
+
+  policy      = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "Stmt1537456755262",
+      "Action": "dms:*",
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachement" "dba_dms_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "${aws_aws_iam_policy.dba_dbmigration_policy.arn}"
+}
+
+
 resource "aws_iam_policy" "dba_parametergroup_policy" {
   name        = "DBAParameterGroup"
   description = "Allows DBAs to create and assign parameter groups"
