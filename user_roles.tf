@@ -147,3 +147,15 @@ resource "aws_iam_role_policy_attachment" "dba_rds_parameter_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "${aws_iam_policy.dba_parametergroup_policy.arn}"
 }
+
+### ReadOnlyRole
+
+resource "aws_iam_role" "read_only_role" {
+  name               = "AWLReadOnlyRole"
+  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
+  role       = "${aws_iam_role.read_only_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
