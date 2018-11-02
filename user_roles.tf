@@ -37,8 +37,9 @@ data "aws_iam_policy_document" "SSO_trust" {
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
-  name               = "AWLAdminRole"
-  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+  name                  = "AWLAdminRole"
+  assume_role_policy    = "${data.aws_iam_policy_document.SSO_trust.json}"
+  max_session_duration  = 12
 }
 
 resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
@@ -51,6 +52,7 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
 resource "aws_iam_role" "sysops_role" {
   name               = "AWLSysOpsRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+  max_session_duration  = 12
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_read_policy_attach" {
@@ -73,6 +75,7 @@ resource "aws_iam_role_policy_attachment" "sysops_rds_policy_attach" {
 resource "aws_iam_role" "dba_role" {
   name               = "AWLDatabaseAnalystRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+  max_session_duration  = 12
 }
 
 resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
@@ -153,6 +156,7 @@ resource "aws_iam_role_policy_attachment" "dba_rds_parameter_policy_attach" {
 resource "aws_iam_role" "read_only_role" {
   name               = "AWLReadOnlyRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+  max_session_duration  = 12
 }
 
 resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
