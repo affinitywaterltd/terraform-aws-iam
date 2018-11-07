@@ -98,6 +98,11 @@ resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dba_sns_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+}
+
 resource "aws_iam_policy" "dba_dbmigration_policy" {
   name        = "DBAMigrationService"
   description = "Allows DBAs to use Database Migration Service"
