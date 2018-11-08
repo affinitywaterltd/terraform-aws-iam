@@ -83,6 +83,12 @@ resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
+}
+
+/*
 resource "aws_iam_role_policy_attachment" "dba_redshift_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
@@ -155,6 +161,8 @@ resource "aws_iam_role_policy_attachment" "dba_rds_parameter_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "${aws_iam_policy.dba_parametergroup_policy.arn}"
 }
+*/
+
 
 ### ReadOnlyRole
 
