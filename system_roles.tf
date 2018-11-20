@@ -37,6 +37,25 @@ resource "aws_iam_instance_profile" "ec2_ssm_role" {
   role = "${aws_iam_role.ec2_ssm_role.name}"
 }
 
+resource "aws_iam_role_policy" "ec2_tags_create" {
+  name = "EC2TagsCreate"
+  role = "${aws_iam_role.ec2_ssm_role.name}"
+
+    policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "ec2:CreateTags",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
 ###############
 #Lambda
 ###############
