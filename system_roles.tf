@@ -37,11 +37,10 @@ resource "aws_iam_instance_profile" "ec2_ssm_role" {
   role = "${aws_iam_role.ec2_ssm_role.name}"
 }
 
-resource "aws_iam_role_policy" "ec2_tags_create" {
-  name = "EC2TagsCreate"
-  role = "${aws_iam_role.ec2_ssm_role.name}"
 
-    policy = <<EOF
+resource "aws_iam_policy" "ec2_tags_create" {
+  name = "EC2TagsCreate"
+  policy = <<EOF
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -54,6 +53,11 @@ resource "aws_iam_role_policy" "ec2_tags_create" {
     ]
 }
 EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
+  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  policy_arn = "${aws_iam_policy.ec2_tags_create.arn}"
 }
 
 ###############
