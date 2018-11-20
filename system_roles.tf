@@ -71,3 +71,8 @@ resource "aws_iam_role_policy_attachment" "lambda_ses_policy_attach" {
   role       = "${aws_iam_role.lambda_reporting_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attach" {
+role = "${aws_iam_role.lambda_reporting_role.name}"
+policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+}
