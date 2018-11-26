@@ -5,5 +5,5 @@ output "ec2_ssm_role" {
 
 output "lambda_reporting_role" {
   description = "Default role for EC2 instances to give SSM access"
-  value       = "${aws_iam_role.lambda_reporting_role.name}"
+  value       = "${aws_iam_role.lambda_reporting_role.arn}"
 } 
