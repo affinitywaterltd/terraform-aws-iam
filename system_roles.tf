@@ -84,7 +84,7 @@ resource "aws_iam_role" "lambda_reporting_role" {
 
   assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
 }
-
+/*
 resource "aws_iam_role_policy_attachment" "lambda_readonly_policy_attach" {
   role       = "${aws_iam_role.lambda_reporting_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
@@ -99,3 +99,4 @@ resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attach" {
 role = "${aws_iam_role.lambda_reporting_role.name}"
 policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
+*/
