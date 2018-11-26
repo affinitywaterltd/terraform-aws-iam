@@ -169,7 +169,7 @@ resource "aws_iam_role_policy_attachment" "dba_rds_parameter_policy_attach" {
 resource "aws_iam_role" "read_only_role" {
   name               = "AWLReadOnlyRole"
   assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43201
+  max_session_duration  = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
