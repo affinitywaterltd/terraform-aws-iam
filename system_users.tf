@@ -73,6 +73,7 @@ resource "aws_iam_user" "ses_smtp_user" {
 }
 
 resource "aws_iam_user_policy" "ses_smtp_user" {
+  user       = "${aws_iam_user.ses_smtp_user.name}"
   name = "SesSendingAccess"
 
   policy = <<EOF
@@ -87,9 +88,4 @@ resource "aws_iam_user_policy" "ses_smtp_user" {
     ]
 }
 EOF
-}
-
-resource "aws_iam_user_policy_attachment" "ses_smtp_user" {
-  user       = "${aws_iam_user.ses_smtp_user.name}"
-  policy_arn = "${aws_iam_user_policy.ses_smtp_user.arn}"
 }
