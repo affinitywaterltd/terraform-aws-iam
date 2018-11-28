@@ -65,3 +65,31 @@ resource "aws_iam_user_policy" "citrix_machine_creation" {
 }
 EOF
 }
+
+#SES User
+resource "aws_iam_user" "ses_smtp_user" {
+  name               = "ses_smtp_user"
+  force_destroy      = true
+}
+
+resource "aws_iam_user_policy" "ses_smtp_user" {
+  name = "SesSendingAccess"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ses:SendRawEmail",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_user_policy_attachment" "ses_smtp_user" {
+  user       = "${aws_iam_user.ses_smtp_user.name}"
+  policy_arn = "${aws_iam_user_policy.ses_smtp_user.arn}"
+}
