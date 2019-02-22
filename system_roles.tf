@@ -8,20 +8,20 @@ resource "aws_iam_role" "ec2_ssm_role" {
   name = "SSM_Role"
 
   assume_role_policy = <<EOF
- {
-   "Version": "2012-10-17",
-   "Statement": [
-     {
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
 
-       "Action": "sts:AssumeRole",
-       "Principal": {
-         "Service": [ "ec2.amazonaws.com", "ssm.amazonaws.com" ]
-       },
-       "Effect": "Allow",
-       "Sid": ""
-     }
-   ]
- }
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": [ "ec2.amazonaws.com", "ssm.amazonaws.com" ]
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
  EOF
 }
 
