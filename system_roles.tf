@@ -11,6 +11,10 @@ data "aws_iam_policy_document" "ec2_assume_role_policy" {
       type        = "Service"
       identifiers = ["ec2.amazonaws.com"]
     }
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
   }
 }
 
@@ -30,6 +34,11 @@ resource "aws_iam_role_policy_attachment" "ec2_ssm_role_policy_attach" {
 resource "aws_iam_role_policy_attachment" "ec2_read_role_policy_attach" {
   role       = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "sns_full_role_policy_attach" {
+  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
 
 resource "aws_iam_instance_profile" "ec2_ssm_role" {
@@ -59,6 +68,34 @@ resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
   role       = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "${aws_iam_policy.ec2_tags_create.arn}"
 }
+
+
+resource "aws_iam_policy" "ec2_snapshot" {
+  name = "EC2Snapshot"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DeleteSnapshot",
+                "ec2:ModifySnapshotAttribute",
+                "ec2:CreateSnapshot"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ec2_snapshot_role_policy_attach" {
+  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  policy_arn = "${aws_iam_policy.ec2_snapshot.arn}"
+}
+
 
 ###############
 #Lambda
