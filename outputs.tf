@@ -7,3 +7,8 @@ output "lambda_report_role" {
   description = "Default role for Lambda Reporting"
   value       = "${aws_iam_role.lambda_reporting_role.arn}"
 } 
+
+output "ssm_service_role" {
+  description = "SSM Service Linked Role"
+  value       = "${aws_iam_service_linked_role.iam_service_linked_role_for_ssm.arn}"
+} 

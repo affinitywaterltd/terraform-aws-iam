@@ -135,3 +135,16 @@ resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attach" {
 role = "${aws_iam_role.lambda_reporting_role.name}"
 policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
+
+
+
+
+###############
+#SSM
+###############
+
+# SSM Service linked role
+
+resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
+  aws_service_name = "ssm.amazonaws.com"
+}
