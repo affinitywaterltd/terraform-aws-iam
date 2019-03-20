@@ -90,6 +90,28 @@ resource "aws_iam_policy" "ec2_snapshot" {
 EOF
 }
 
+resource "aws_iam_policy" "s3_bucket_ssm_scripts" {
+  name = "S3SSMScripts"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "s3:Get*",
+            "Resource": "arn:aws:s3:::aw-ssm-logs"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "s3_bucket_ssm_scripts_role_policy_attach" {
+  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  policy_arn = "${aws_iam_policy.s3_bucket_ssm_scripts.arn}"
+}
+
 resource "aws_iam_role_policy_attachment" "ec2_snapshot_role_policy_attach" {
   role       = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "${aws_iam_policy.ec2_snapshot.arn}"
