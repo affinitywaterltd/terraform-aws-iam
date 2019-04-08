@@ -81,7 +81,8 @@ resource "aws_iam_policy" "ec2_snapshot" {
             "Action": [
                 "ec2:DeleteSnapshot",
                 "ec2:ModifySnapshotAttribute",
-                "ec2:CreateSnapshot"
+                "ec2:CreateSnapshot",
+                "ssm:GetParameter"
             ],
             "Resource": "*"
         }
