@@ -103,6 +103,89 @@ resource "aws_iam_role_policy_attachment" "dba_admin_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
 }
 
+
+resource "aws_iam_policy" "dba_dbmigration_policy" {
+  name        = "DB_Migration_Service"
+  description = "Allows DBAs to use Database Migration Service"
+
+  policy      = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "dms:*",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kms:ListAliases", 
+                "kms:DescribeKey"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "iam:PassRole",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeVpcs",
+                "ec2:DescribeInternetGateways",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeSecurityGroups",
+                "ec2:ModifyNetworkInterfaceAttribute",
+                "ec2:CreateNetworkInterface",
+                "ec2:DeleteNetworkInterface"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cloudwatch:Get*",
+                "cloudwatch:List*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "logs:FilterLogEvents",
+                "logs:GetLogEvents"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "redshift:Describe*",
+                "redshift:ModifyClusterIamRoles"
+            ],
+            "Resource": "*"
+        }
+    ]
+} 
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "${aws_iam_policy.dba_dbmigration_policy.arn}"
+}
+
+
 /*
 resource "aws_iam_role_policy_attachment" "dba_redshift_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
@@ -130,15 +213,31 @@ resource "aws_iam_policy" "dba_dbmigration_policy" {
 
   policy      = <<POLICY
 {
-  "Version": "2012-10-17",
-  "Statement": [
-    {
-      "Sid": "Stmt1537456755262",
-      "Action": "dms:*",
-      "Effect": "Allow",
-      "Resource": "*"
-    }
-  ]
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetRole",
+                "logs:DescribeLogGroups",
+                "logs:DescribeLogStreams",
+                "cloudwatch:List*",
+                "redshift:ModifyClusterIamRoles",
+                "iam:CreateRole",
+                "iam:AttachRolePolicy",
+                "dms:*",
+                "iam:PassRole",
+                "redshift:Describe*",
+                "kms:ListAliases",
+                "logs:GetLogEvents",
+                "kms:DescribeKey",
+                "logs:FilterLogEvents",
+                "cloudwatch:Get*"
+            ],
+            "Resource": "*"
+        }
+    ]
 }
 POLICY
 }
