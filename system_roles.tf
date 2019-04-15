@@ -171,3 +171,54 @@ policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
   aws_service_name = "ssm.amazonaws.com"
 }
+
+
+
+###################
+#Sophos-Central-AWS
+###################
+
+# Sophos Central Console Connection Role
+
+resource "aws_iam_role" "sophos_central_aws" {
+  name = "Sophos-Central-AWS"
+}
+resource "aws_iam_policy" "sophos_central_aws" {
+  name = "sophos_central_aws"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetGroupPolicy",
+                "iam:GetUserPolicy",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListUserPolicies",
+                "iam:ListAttachedGroupPolicies",
+                "iam:ListGroupsForUser",
+                "iam:ListGroupsForPolicies",
+                "iam:ListGroupPolicies",
+                "iam:GetUser",
+                "iam:GetPolicy",
+                "iam:GetPolicyVersion",
+                "ec2:DescribeInstances",
+                "ec2:DescribeRegions",
+                "autoscaling:DescribeAutoScalingGroups",
+                "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "sophos_central_aws_role_policy_attach" {
+  role       = "${aws_iam_role.sophos_central_aws.name}"
+  policy_arn = "${aws_iam_policy.sophos_central_aws.arn}"
+} 
+ 

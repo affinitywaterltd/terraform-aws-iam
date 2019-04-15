@@ -12,3 +12,8 @@ output "ssm_service_role" {
   description = "SSM Service Linked Role"
   value       = "${aws_iam_service_linked_role.iam_service_linked_role_for_ssm.arn}"
 } 
+
+output "sophos_central_aws" {
+  description = "Sophos Central Console Connector Role"
+  value       = "${aws_iam_role.sophos_central_aws.arn}"
+} 
