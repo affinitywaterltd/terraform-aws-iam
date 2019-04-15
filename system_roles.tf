@@ -182,6 +182,9 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 
 resource "aws_iam_role" "sophos_central_aws" {
   name = "Sophos-Central-AWS"
+  lifecycle {
+    ignore_changes = ["assume_role_policy"]
+    } 
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
