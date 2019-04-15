@@ -187,12 +187,16 @@ resource "aws_iam_role" "sophos_central_aws" {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
       "Effect": "Allow",
-      "Sid": ""
+      "Principal": {
+        "AWS": "arn:aws:iam::062897671886:root"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": ""
+        }
+      }
     }
   ]
 }
