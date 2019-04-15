@@ -214,21 +214,20 @@ resource "aws_iam_policy" "sophos_central_aws" {
         {
             "Effect": "Allow",
             "Action": [
-                "iam:GetGroupPolicy",
-                "iam:GetUserPolicy",
-                "iam:ListAttachedUserPolicies",
-                "iam:ListUserPolicies",
-                "iam:ListAttachedGroupPolicies",
-                "iam:ListGroupsForUser",
-                "iam:ListGroupsForPolicies",
-                "iam:ListGroupPolicies",
                 "iam:GetUser",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
                 "ec2:DescribeInstances",
                 "ec2:DescribeRegions",
                 "autoscaling:DescribeAutoScalingGroups",
-                "autoscaling:DescribeAutoScalingInstances"
+		"s3:ListAllMyBuckets",
+		"s3:GetBucketLocation",
+		"s3:GetBucketPolicy",
+		"s3:GetBucketVersioning",
+		"s3:GetEncryptionConfiguration",
+		"s3:GetBucketAcl",
+		"cloudTrail:DescribeTrails",
+		"cloudTrail:GetTrailStatus",
+		"cloudTrail:GetEventSelectors",
+		"securityhub:BatchImportFindings"
             ],
             "Resource": [
                 "*"
