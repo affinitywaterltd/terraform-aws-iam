@@ -85,6 +85,11 @@ resource "aws_iam_role_policy_attachment" "sysops_s3_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_support_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSupportAccess"
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
