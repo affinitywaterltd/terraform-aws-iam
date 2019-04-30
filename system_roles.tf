@@ -182,17 +182,24 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 
 resource "aws_iam_role" "sophos_central_aws" {
   name = "Sophos-Central-AWS"
+  lifecycle {
+    ignore_changes = ["assume_role_policy"]
+    } 
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
   "Statement": [
     {
-      "Action": "sts:AssumeRole",
-      "Principal": {
-        "Service": "ec2.amazonaws.com"
-      },
       "Effect": "Allow",
-      "Sid": ""
+      "Principal": {
+        "AWS": "arn:aws:iam::062897671886:root"
+      },
+      "Action": "sts:AssumeRole",
+      "Condition": {
+        "StringEquals": {
+          "sts:ExternalId": ""
+        }
+      }
     }
   ]
 }
@@ -207,21 +214,20 @@ resource "aws_iam_policy" "sophos_central_aws" {
         {
             "Effect": "Allow",
             "Action": [
-                "iam:GetGroupPolicy",
-                "iam:GetUserPolicy",
-                "iam:ListAttachedUserPolicies",
-                "iam:ListUserPolicies",
-                "iam:ListAttachedGroupPolicies",
-                "iam:ListGroupsForUser",
-                "iam:ListGroupsForPolicies",
-                "iam:ListGroupPolicies",
                 "iam:GetUser",
-                "iam:GetPolicy",
-                "iam:GetPolicyVersion",
                 "ec2:DescribeInstances",
                 "ec2:DescribeRegions",
                 "autoscaling:DescribeAutoScalingGroups",
-                "autoscaling:DescribeAutoScalingInstances"
+		"s3:ListAllMyBuckets",
+		"s3:GetBucketLocation",
+		"s3:GetBucketPolicy",
+		"s3:GetBucketVersioning",
+		"s3:GetEncryptionConfiguration",
+		"s3:GetBucketAcl",
+		"cloudTrail:DescribeTrails",
+		"cloudTrail:GetTrailStatus",
+		"cloudTrail:GetEventSelectors",
+		"securityhub:BatchImportFindings"
             ],
             "Resource": [
                 "*"
