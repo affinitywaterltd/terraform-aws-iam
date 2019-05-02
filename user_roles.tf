@@ -90,6 +90,11 @@ resource "aws_iam_role_policy_attachment" "sysops_support_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
@@ -106,6 +111,11 @@ resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
 resource "aws_iam_role_policy_attachment" "dba_admin_policy_attach" {
   role       = "${aws_iam_role.dba_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
 }
 
 
