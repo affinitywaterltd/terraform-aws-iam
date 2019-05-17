@@ -242,4 +242,68 @@ resource "aws_iam_role_policy_attachment" "sophos_central_aws_role_policy_attach
   role       = "${aws_iam_role.sophos_central_aws.name}"
   policy_arn = "${aws_iam_policy.sophos_central_aws.arn}"
 } 
+
+###################
+#Citrix-Smart-Scale
+###################
+
+# Citrix Smart Scale 
+
+resource "aws_iam_role" "citrix_smart_scale" {
+  name = "Citrix-Smart-Scale"
+  lifecycle {
+    ignore_changes = ["assume_role_policy"]
+    } 
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+}
+resource "aws_iam_policy" "citrix_smart_scale" {
+  name = "Citrix_Smart_Scale_pol"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DisassociateAddress",
+                "ec2:RebootInstances",
+                "sns:*",
+                "iam:GetRole",
+                "ec2:DescribeInstances",
+                "ec2:DescribeAddresses",
+                "ec2:DetachNetworkInterface",
+                "ec2:StopInstances",
+                "autoscaling-plans:*",
+                "sqs:*",
+                "iam:SimulatePrincipalPolicy",
+                "ec2:DescribeNetworkInterfaces",
+                "ec2:StartInstances",
+                "ec2:AttachNetworkInterface",
+                "ec2:AssociateAddress"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach" {
+  role       = "${aws_iam_role.citrix_smart_scale.name}"
+  policy_arn = "${aws_iam_policy.Citrix_Smart_Scale_pol.arn}"
+} 
  
