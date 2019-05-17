@@ -304,6 +304,6 @@ EOF
 
 resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach" {
   role       = "${aws_iam_role.citrix_smart_scale.name}"
-  policy_arn = "${aws_iam_policy.Citrix_Smart_Scale_pol.arn}"
+  policy_arn = "${aws_iam_policy.Citrix_Smart_Scale.arn}"
 } 
  
