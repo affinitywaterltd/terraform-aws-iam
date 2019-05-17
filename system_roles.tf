@@ -309,5 +309,5 @@ resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach
  
  resource "aws_iam_instance_profile" "citrix_smart_scale_role" {
   name = "citrix_smart_scale"
-  role = "${aws_iam_role.citrix_smart_scale_role.name}"
+  role = "${aws_iam_role.citrix_smart_scale.name}"
 }
