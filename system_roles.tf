@@ -269,8 +269,8 @@ resource "aws_iam_role" "citrix_smart_scale" {
  "ec2:RebootInstances",
  "autoscaling:*",
  "sns:*",
- "sqs:*"
- “iam: SimulatePrincipalPolicy”
+ "sqs:*",
+ “iam: SimulatePrincipalPolicy”,
  “iam: GetRole”
  ],
  "Resource": "*",
