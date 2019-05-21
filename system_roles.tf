@@ -250,7 +250,7 @@ resource "aws_iam_role_policy_attachment" "sophos_central_aws_role_policy_attach
 # Citrix Smart Scale 
 
 resource "aws_iam_role" "citrix_smart_scale" {
-  name = "Citrix-ADM-SmartScale"
+  name = "Citrix-ADC-SmartScale"
   lifecycle {
     ignore_changes = ["assume_role_policy"]
     } 
@@ -270,34 +270,32 @@ resource "aws_iam_role" "citrix_smart_scale" {
 EOF
 }
 resource "aws_iam_policy" "citrix_smart_scale" {
-  name = "Citrix-ADM-SmartScale-pol"
+  name = "Citrix-ADC-SmartScale-pol"
   policy = <<EOF
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:DisassociateAddress",
-                "ec2:RebootInstances",
-                "sns:*",
-                "iam:GetRole",
-                "ec2:DescribeInstances",
-                "ec2:DescribeAddresses",
-                "ec2:DetachNetworkInterface",
-                "ec2:StopInstances",
-                "autoscaling-plans:*",
-                "sqs:*",
-                "iam:SimulatePrincipalPolicy",
-                "ec2:DescribeNetworkInterfaces",
-                "ec2:StartInstances",
-                "ec2:AttachNetworkInterface",
-                "ec2:AssociateAddress"
-            ],
-            "Resource": "*"
-        }
-    ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "VisualEditor0",
+      "Effect": "Allow",
+      "Action": [
+        "iam:GetRole",
+        "iam:SimulatePrincipalPolicy",
+        "autoscaling:*",
+        "sns:*",
+        "sqs:*",
+        "cloudwatch:*",
+        "ec2:AssignPrivateIpAddresses",
+        "ec2:DescribeInstances",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DetachNetworkInterface",
+        "ec2:AttachNetworkInterface",
+        "ec2:StartInstances",
+        "ec2:StopInstances"
+      ],
+      "Resource": "*"
+    }
+  ]
 }
 EOF
 }
