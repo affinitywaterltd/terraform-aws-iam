@@ -256,27 +256,16 @@ resource "aws_iam_role" "citrix_smart_scale" {
     } 
   assume_role_policy = <<EOF
 {
- "Version": "2012-10-17",
- "Statement": [
- {
- "Action": [
- "ec2:DescribeInstances",
- "ec2:DescribeNetworkInterfaces",
- "ec2:DetachNetworkInterface",
- "ec2:AttachNetworkInterface",
- "ec2:StartInstances",
- "ec2:StopInstances",
- "ec2:RebootInstances",
- "autoscaling:*",
- "sns:*",
- "sqs:*",
- “iam: SimulatePrincipalPolicy”,
- “iam: GetRole”
- ],
- "Resource": "*",
- "Effect": "Allow"
- }
- ]
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "ec2.amazonaws.com"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
 }
 EOF
 }
