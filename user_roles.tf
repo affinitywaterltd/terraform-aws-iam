@@ -95,6 +95,11 @@ resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
