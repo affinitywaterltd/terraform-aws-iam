@@ -328,9 +328,10 @@ resource "aws_iam_role" "adm_citrix_smart_scale" {
     {
       "Effect": "Allow",
       "Principal": {
-        "Service": "ec2.amazonaws.com"
+        "AWS": "arn:aws:iam::835822366011:root"
       },
-      "Action": "sts:AssumeRole"
+      "Action": "sts:AssumeRole",
+      "Condition": {}
     }
   ]
 }
