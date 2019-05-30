@@ -309,7 +309,7 @@ resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach
   name = "Citrix-ADC-SmartScale"
   role = "${aws_iam_role.citrix_smart_scale.name}"
 }
-
+/*
 ###################
 #ADM-Citrix-Smart-Scale
 ###################
@@ -464,8 +464,9 @@ resource "aws_iam_role_policy_attachment" "adm_citrix_smart_scale_role_policy_at
   role       = "${aws_iam_role.adm_citrix_smart_scale.name}"
   policy_arn = "${aws_iam_policy.adm_citrix_smart_scale.arn}"
 } 
- 
+
  resource "aws_iam_instance_profile" "adc_citrix_smart_scale_role" {
   name = "Citrix-ADM-SmartScale"
   role = "${aws_iam_role.adm_citrix_smart_scale.name}"
 }
+*/
