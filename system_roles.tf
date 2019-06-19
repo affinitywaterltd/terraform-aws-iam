@@ -309,3 +309,31 @@ resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach
   name = "Citrix-ADC-SmartScale"
   role = "${aws_iam_role.citrix_smart_scale.name}"
 }
+
+# -----------------------------------------------------------
+# AWS Config Role
+# -----------------------------------------------------------
+resource "aws_iam_role" "config" {
+  name = "awl-config"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "config.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "config" {
+  role       = "${aws_iam_role.config.name}"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
+}
