@@ -310,3 +310,46 @@ resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
   role       = "${aws_iam_role.read_only_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
+
+
+### DevOpsRole
+
+resource "aws_iam_role" "dev_ops_role" {
+  name               = "AWLDevOpsRole"
+  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
+  max_session_duration  = 43199
+}
+
+resource "aws_iam_role_policy_attachment" "dev_s3_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildDeveloperAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_codedeploy_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_codepipeline_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineFullAccess"
+}
+resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+}
