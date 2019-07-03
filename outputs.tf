@@ -8,8 +8,8 @@ output "lambda_report_role" {
   value       = "${aws_iam_role.lambda_reporting_role.arn}"
 } 
 
-output "lambda_snapshot_cleanupt_role" {
-  description = "Default role for Lambda Reporting"
+output "lambda_snapshot_cleanup_role" {
+  description = "Default role for Snapshot cleanups"
   value       = "${aws_iam_role.lambda_snapshot_cleanup_role.arn}"
 } 
 
