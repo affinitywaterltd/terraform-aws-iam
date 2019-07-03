@@ -9,7 +9,7 @@ output "lambda_report_role" {
 } 
 
 output "lambda_snapshot_cleanup_role" {
-  description = "Default role for Snapshot cleanups"
+  description = "Default role for MW Snapshot cleanups"
   value       = "${aws_iam_role.lambda_snapshot_cleanup_role.arn}"
 } 
 

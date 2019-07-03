@@ -362,8 +362,7 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
             "Effect": "Allow",
             "Action": [
                 "ec2:DeleteSnapshot",
-                "ec2:ModifySnapshotAttribute",
-                "ec2:Describe*"
+                "ec2:ModifySnapshotAttribute"
             ],
             "Resource": "*"
         }
