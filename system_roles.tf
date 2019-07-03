@@ -337,3 +337,48 @@ resource "aws_iam_role_policy_attachment" "config" {
   role       = "${aws_iam_role.config.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
 }
+
+
+# SSM Maintenance Window snapshot cleanup role
+data "aws_iam_policy_document" "lambda_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["lambda.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "lambda_snapshot_cleanup_role" {
+  name = "lambda-snapshot-cleanup-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_readonly_policy_attach" {
+  role       = "${aws_iam_role.lambda_snapshot_cleanup_role.name}"
+  policy_arn = "${aws_iam_policy.ec2_cleanup_snapshot.arn}"
+}
+
+resource "aws_iam_policy" "ec2_cleanup_snapshot" {
+  name = "ec2-cleanup-snapshot"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DeleteSnapshot",
+                "ec2:ModifySnapshotAttribute",
+                "ec2:Describe*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
