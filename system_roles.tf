@@ -338,7 +338,7 @@ resource "aws_iam_role_policy_attachment" "config" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
 }
 
-/*
+
 # SSM Maintenance Window snapshot cleanup role
 resource "aws_iam_role" "lambda_snapshot_cleanup_role" {
   name = "lambda-snapshot-cleanup-role"
@@ -370,4 +370,4 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
     ]
 }
 EOF
-}*/
+}
