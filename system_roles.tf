@@ -380,7 +380,7 @@ resource "aws_iam_role" "lambda_maintenance_window_update_role" {
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_maintenance_window_update_attach" {
-  role       = "${aws_iam_role.lambda_snapshot_cleanup_role.name}"
+  role       = "${aws_iam_role.lambda_maintenance_window_update_role.name}"
   policy_arn = "${aws_iam_policy.ssm_maintenance_window_update.arn}"
 }
 
