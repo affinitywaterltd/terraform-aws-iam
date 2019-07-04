@@ -395,7 +395,7 @@ resource "aws_iam_policy" "ssm_maintenance_window_update" {
             "Effect": "Allow",
             "Action": [
                 "ssm:UpdateMaintenanceWindowTask",
-                "logs:*",
+                "logs:*"
             ],
             "Resource": "*"
         }
