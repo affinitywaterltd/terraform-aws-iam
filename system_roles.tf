@@ -371,3 +371,34 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
 }
 EOF
 }
+
+# SSM Maintenance Window Updates
+resource "aws_iam_role" "lambda_maintenance_window_update_role" {
+  name = "lambda-maintenance-window-update-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_maintenance_window_update_attach" {
+  role       = "${aws_iam_role.lambda_snapshot_cleanup_role.name}"
+  policy_arn = "${aws_iam_policy.ssm_maintenance_window_update.arn}"
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_update" {
+  name = "ssm-maintenance-window-update"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ssm:UpdateMaintenanceWindowTask"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
