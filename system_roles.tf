@@ -394,7 +394,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_update" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "ssm:UpdateMaintenanceWindowTask"
+                "ssm:UpdateMaintenanceWindowTask",
+                "logs:*",
             ],
             "Resource": "*"
         }
