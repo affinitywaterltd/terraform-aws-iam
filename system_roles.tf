@@ -108,25 +108,6 @@ resource "aws_iam_policy" "s3_bucket_ssm_scripts" {
 EOF
 }
 
-resource "aws_iam_policy" "ec2_startinstance" {
-  name = "EC2StartInstance"
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "ec2:StartInstances"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-}
-
 resource "aws_iam_role_policy_attachment" "s3_bucket_ssm_scripts_role_policy_attach" {
   role       = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "${aws_iam_policy.s3_bucket_ssm_scripts.arn}"
@@ -135,11 +116,6 @@ resource "aws_iam_role_policy_attachment" "s3_bucket_ssm_scripts_role_policy_att
 resource "aws_iam_role_policy_attachment" "ec2_snapshot_role_policy_attach" {
   role       = "${aws_iam_role.ec2_ssm_role.name}"
   policy_arn = "${aws_iam_policy.ec2_snapshot.arn}"
-}
-
-resource "aws_iam_role_policy_attachment" "ec2_startinstance_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
-  policy_arn = "${aws_iam_policy.ec2_startinstance.arn}"
 }
 
 ###############
