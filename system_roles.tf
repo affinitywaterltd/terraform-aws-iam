@@ -423,7 +423,7 @@ resource "aws_iam_role" "ssm_maintenance_window_start_instance_role" {
   assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
 }
 
-resource "aws_iam_role_policy_attachment" "lambda_maintenance_window_update_attach" {
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
   role       = "${aws_iam_role.ssm_maintenance_window_start_instance_role.name}"
   policy_arn = "${aws_iam_policy.ssm_maintenance_window_start_instances.arn}"
 }
