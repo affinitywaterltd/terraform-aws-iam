@@ -172,6 +172,28 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 }
 
 
+data "aws_iam_policy_document" "ssm_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ssm_role" {
+  name = "test-ssm-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_policy_attach" {
+  role       = "${aws_iam_role.ssm_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonSSMServiceRolePolicy"
+}
+
 
 ###################
 #Sophos-Central-AWS
