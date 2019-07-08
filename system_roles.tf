@@ -172,28 +172,6 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 }
 
 
-data "aws_iam_policy_document" "ssm_assume_role_policy" {
-  statement {
-    actions = ["sts:AssumeRole"]
-
-    principals {
-      type        = "Service"
-      identifiers = ["ssm.amazonaws.com"]
-    }
-  }
-}
-
-resource "aws_iam_role" "ssm_role" {
-  name = "test-ssm-role"
-
-  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
-}
-
-resource "aws_iam_role_policy_attachment" "ssm_policy_attach" {
-  role       = "${aws_iam_role.ssm_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonSSMServiceRolePolicy"
-}
-
 
 ###################
 #Sophos-Central-AWS
@@ -419,6 +397,48 @@ resource "aws_iam_policy" "ssm_maintenance_window_update" {
                 "ssm:GetMaintenanceWindowTask",
                 "ssm:GetMaintenanceWindow",
                 "logs:*"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+# SSM Start Instances
+
+data "aws_iam_policy_document" "ssm_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
+  }
+}
+resource "aws_iam_role" "ssm_maintenance_window_start_instance_role" {
+  name = "ssm-maintenance-window-start-instance-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_maintenance_window_update_attach" {
+  role       = "${aws_iam_role.ssm_maintenance_window_start_instance_role.name}"
+  policy_arn = "${aws_iam_policy.ssm_maintenance_window_start_instances.arn}"
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
+  name = "ssm-maintenance-window-start-instances"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:StartInstances"
             ],
             "Resource": "*"
         }
