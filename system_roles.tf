@@ -446,3 +446,35 @@ resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
 }
 EOF
 }
+
+# Lambda Citrix Tagging Role
+resource "aws_iam_role" "lambda_ec2_tagging_citrix_mcs_servers_role" {
+  name = "lambda-ec2-tagging-citrix-mcs-servers-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_ec2_tagging_citrix_mcs_servers_role_attach" {
+  role       = "${aws_iam_role.lambda_ec2_tagging_citrix_mcs_servers_role.name}"
+  policy_arn = "${aws_iam_policy.lambda_ec2_tagging_citrix_mcs_servers_policy.arn}"
+}
+
+resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
+  name = "lambda-ec2-tagging-citrix-mcs-servers"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:Describe*",
+                "ec2:CreateTags"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
