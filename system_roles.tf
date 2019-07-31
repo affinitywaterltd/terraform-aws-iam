@@ -506,7 +506,7 @@ resource "aws_iam_policy" "lambda_cloudwatch_logs_expiration_policy" {
                 "logs:PutRetentionPolicy",
                 "logs:CreateLogGroup",
                 "logs:CreateLogStream",
-                "logs:PutLogEvent",
+                "logs:PutLogEvent"
             ],
             "Resource": "*"
         }
