@@ -22,6 +22,7 @@ output "lambda_ec2_tagging_citrix_mcs_servers_role" {
   description = "Default role for Taggins Citrix MCS EC2s"
   value       = "${aws_iam_role.lambda_ec2_tagging_citrix_mcs_servers_role.arn}"
 } 
+
 output "ssm_service_role" {
   description = "SSM Service Linked Role"
   value       = "${aws_iam_service_linked_role.iam_service_linked_role_for_ssm.arn}"

@@ -470,7 +470,8 @@ resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
             "Effect": "Allow",
             "Action": [
                 "ec2:Describe*",
-                "ec2:CreateTags"
+                "ec2:CreateTags",
+                "logs:*"
             ],
             "Resource": "*"
         }
