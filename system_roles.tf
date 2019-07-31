@@ -503,7 +503,10 @@ resource "aws_iam_policy" "lambda_cloudwatch_logs_expiration_policy" {
             "Effect": "Allow",
             "Action": [
                 "logs:DescribeLogGroups",
-                "logs:PutRetentionPolicy"
+                "logs:PutRetentionPolicy",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvent",
             ],
             "Resource": "*"
         }
