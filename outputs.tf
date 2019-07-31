@@ -19,8 +19,13 @@ output "lambda_maintenance_window_update_role" {
 } 
 
 output "lambda_ec2_tagging_citrix_mcs_servers_role" {
-  description = "Default role for Taggins Citrix MCS EC2s"
+  description = "Default role for Tagging Citrix MCS EC2s"
   value       = "${aws_iam_role.lambda_ec2_tagging_citrix_mcs_servers_role.arn}"
+} 
+
+output "lambda_cloudwatch_logs_expiration_role" {
+  description = "Default role for configuring expiration on all unconfigured Cloudwatch Logs"
+  value       = "${aws_iam_role.lambda_cloudwatch_logs_expiration_role.arn}"
 } 
 
 output "ssm_service_role" {

@@ -479,3 +479,36 @@ resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
 }
 EOF
 }
+
+# CloudWatchLog Expiration Role
+resource "aws_iam_role" "lambda_cloudwatch_logs_expiration_role" {
+  name = "lambda-cloudwatch-logs-expiration-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_logs_expiration_attach" {
+  role       = "${aws_iam_role.lambda_cloudwatch_logs_expiration_role.name}"
+  policy_arn = "${aws_iam_policy.lambda_cloudwatch_logs_expiration_policy.arn}"
+}
+
+resource "aws_iam_policy" "lambda_cloudwatch_logs_expiration_policy" {
+  name = "lambda-cloudwatch-logs-expiration"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "logs:DescribeLogGroups",
+                "logs:PutRetentionPolicy"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
