@@ -353,3 +353,14 @@ resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
+
+resource "aws_iam_role_policy_attachment" "dev_translate_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
+}
+
+
+resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
+}
