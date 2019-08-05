@@ -364,3 +364,27 @@ resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
 }
+
+
+resource "aws_iam_policy" "dev_iam_create_policy" {
+  name        = "dev_create_iam_policy"
+  description = "Allows Devs up create IAM policies"
+
+  policy      = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreatePolicyVersion",
+            "Resource": "*"
+        }
+    ]
+} 
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "dev_iam_create_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "${aws_iam_policy.dev_iam_create_policy.arn}"
+}
