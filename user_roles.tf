@@ -332,7 +332,7 @@ resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
 
 resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
