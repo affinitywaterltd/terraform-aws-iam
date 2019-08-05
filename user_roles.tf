@@ -376,8 +376,10 @@ resource "aws_iam_policy" "dev_iam_create_policy" {
     "Statement": [
         {
             "Effect": "Allow",
-            "Action": "iam:CreatePolicyVersion",
-            "Action": "iam:DeletePolicyVersion",
+            "Action": [
+                "iam:CreatePolicyVersion",
+                "iam:DeletePolicyVersion"
+            ],
             "Resource": "*"
         }
     ]
