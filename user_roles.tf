@@ -365,6 +365,10 @@ resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dev_kinesis_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
+}
 
 resource "aws_iam_policy" "dev_iam_create_policy" {
   name        = "dev_create_iam_policy"
