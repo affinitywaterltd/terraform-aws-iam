@@ -407,8 +407,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
 {
     "Version": "2012-10-17",
     "Statement": [
-      
-        #arn:aws:iam::aws:policy/AWSCodeCommitFullAccess
         {
             "Effect": "Allow",
             "Action": [
@@ -502,8 +500,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
             ],
             "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
         },
-
-        #arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
         {
             "Action": "codedeploy:*",
             "Effect": "Allow",
@@ -623,8 +619,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
                 "arn:aws:events:*:*:rule/codepipeline-*"
             ]
         },
-
-        #arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
         {
             "Action": [
                 "codebuild:*",
