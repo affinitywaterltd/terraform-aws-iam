@@ -330,6 +330,7 @@ resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
+/*
 resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
@@ -348,7 +349,8 @@ resource "aws_iam_role_policy_attachment" "dev_codedeploy_role_policy_attach" {
 resource "aws_iam_role_policy_attachment" "dev_codepipeline_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineFullAccess"
-}
+}*/
+
 resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
@@ -390,7 +392,284 @@ resource "aws_iam_policy" "dev_iam_create_policy" {
 POLICY
 }
 
-resource "aws_iam_role_policy_attachment" "dev_iam_create_policy_attach" {
+resource "aws_iam_role_policy_attachment" "dev_iam_code_services_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "${aws_iam_policy.dev_iam_create_policy.arn}"
+  policy_arn = "${aws_iam_policy.dev_iam_code_services_policy.arn}"
+}
+
+
+resource "aws_iam_policy" "dev_iam_code_services_policy" {
+  name        = "dev_iam_code_services_policy"
+  description = "Allows Devs permissions from the following roles: AWSCodeCommitFullAccess"
+
+  policy      = <<POLICY
+
+{
+    "Version": "2012-10-17",
+    "Statement": [
+      
+        #arn:aws:iam::aws:policy/AWSCodeCommitFullAccess
+        {
+            "Effect": "Allow",
+            "Action": [
+                "codecommit:*"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "CloudWatchEventsCodeCommitRulesAccess",
+            "Effect": "Allow",
+            "Action": [
+                "events:DeleteRule",
+                "events:DescribeRule",
+                "events:DisableRule",
+                "events:EnableRule",
+                "events:PutRule",
+                "events:PutTargets",
+                "events:RemoveTargets",
+                "events:ListTargetsByRule"
+            ],
+            "Resource": "arn:aws:events:*:*:rule/codecommit*"
+        },
+        {
+            "Sid": "SNSTopicAndSubscriptionAccess",
+            "Effect": "Allow",
+            "Action": [
+                "sns:CreateTopic",
+                "sns:DeleteTopic",
+                "sns:Subscribe",
+                "sns:Unsubscribe",
+                "sns:SetTopicAttributes"
+            ],
+            "Resource": "arn:aws:sns:*:*:codecommit*"
+        },
+        {
+            "Sid": "SNSTopicAndSubscriptionReadAccess",
+            "Effect": "Allow",
+            "Action": [
+                "sns:ListTopics",
+                "sns:ListSubscriptionsByTopic",
+                "sns:GetTopicAttributes"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "LambdaReadOnlyListAccess",
+            "Effect": "Allow",
+            "Action": [
+                "lambda:ListFunctions"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "IAMReadOnlyListAccess",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListUsers"
+            ],
+            "Resource": "*"
+        },
+        {
+            "Sid": "IAMReadOnlyConsoleAccess",
+            "Effect": "Allow",
+            "Action": [
+                "iam:ListAccessKeys",
+                "iam:ListSSHPublicKeys",
+                "iam:ListServiceSpecificCredentials"
+            ],
+            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+        },
+        {
+            "Sid": "IAMUserSSHKeys",
+            "Effect": "Allow",
+            "Action": [
+                "iam:DeleteSSHPublicKey",
+                "iam:GetSSHPublicKey",
+                "iam:ListSSHPublicKeys",
+                "iam:UpdateSSHPublicKey",
+                "iam:UploadSSHPublicKey"
+            ],
+            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+        },
+        {
+            "Sid": "IAMSelfManageServiceSpecificCredentials",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateServiceSpecificCredential",
+                "iam:UpdateServiceSpecificCredential",
+                "iam:DeleteServiceSpecificCredential",
+                "iam:ResetServiceSpecificCredential"
+            ],
+            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+        },
+
+        #arn:aws:iam::aws:policy/AWSCodeDeployFullAccess
+        {
+            "Action": "codedeploy:*",
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+
+        #arn:aws:iam::aws:policy/AWSCodePipelineFullAccess
+
+        {
+            "Action": [
+                "codepipeline:*",
+                "cloudformation:DescribeStacks",
+                "cloudformation:ListChangeSets",
+                "cloudtrail:CreateTrail",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:GetEventSelectors",
+                "cloudtrail:PutEventSelectors",
+                "cloudtrail:StartLogging",
+                "codebuild:BatchGetProjects",
+                "codebuild:CreateProject",
+                "codebuild:ListCuratedEnvironmentImages",
+                "codebuild:ListProjects",
+                "codecommit:GetBranch",
+                "codecommit:GetRepositoryTriggers",
+                "codecommit:ListBranches",
+                "codecommit:ListRepositories",
+                "codecommit:PutRepositoryTriggers",
+                "codecommit:GetReferences",
+                "codedeploy:GetApplication",
+                "codedeploy:BatchGetApplications",
+                "codedeploy:GetDeploymentGroup",
+                "codedeploy:BatchGetDeploymentGroups",
+                "codedeploy:ListApplications",
+                "codedeploy:ListDeploymentGroups",
+                "devicefarm:GetDevicePool",
+                "devicefarm:GetProject",
+                "devicefarm:ListDevicePools",
+                "devicefarm:ListProjects",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "ecs:ListClusters",
+                "ecs:ListServices",
+                "elasticbeanstalk:DescribeApplications",
+                "elasticbeanstalk:DescribeEnvironments",
+                "iam:ListRoles",
+                "iam:GetRole",
+                "lambda:GetFunctionConfiguration",
+                "lambda:ListFunctions",
+                "events:ListRules",
+                "events:ListTargetsByRule",
+                "events:DescribeRule",
+                "opsworks:DescribeApps",
+                "opsworks:DescribeLayers",
+                "opsworks:DescribeStacks",
+                "s3:GetBucketPolicy",
+                "s3:GetBucketVersioning",
+                "s3:GetObjectVersion",
+                "s3:ListAllMyBuckets",
+                "s3:ListBucket",
+                "sns:ListTopics"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:CreateBucket",
+                "s3:PutBucketPolicy"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3::*:codepipeline-*"
+        },
+        {
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:iam::*:role/service-role/cwe-role-*"
+            ],
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": [
+                        "events.amazonaws.com"
+                    ]
+                }
+            }
+        },
+        {
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:PassedToService": [
+                        "codepipeline.amazonaws.com"
+                    ]
+                }
+            }
+        },
+        {
+            "Action": [
+                "events:PutRule",
+                "events:PutTargets",
+                "events:DeleteRule",
+                "events:DisableRule",
+                "events:RemoveTargets"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:events:*:*:rule/codepipeline-*"
+            ]
+        },
+
+        #arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess
+        {
+            "Action": [
+                "codebuild:*",
+                "codecommit:GetBranch",
+                "codecommit:GetCommit",
+                "codecommit:GetRepository",
+                "codecommit:ListBranches",
+                "codecommit:ListRepositories",
+                "cloudwatch:GetMetricStatistics",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ecr:DescribeRepositories",
+                "ecr:ListImages",
+                "events:DeleteRule",
+                "events:DescribeRule",
+                "events:DisableRule",
+                "events:EnableRule",
+                "events:ListTargetsByRule",
+                "events:ListRuleNamesByTarget",
+                "events:PutRule",
+                "events:PutTargets",
+                "events:RemoveTargets",
+                "logs:GetLogEvents",
+                "s3:GetBucketLocation",
+                "s3:ListAllMyBuckets"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "logs:DeleteLogGroup"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:logs:*:*:log-group:/aws/codebuild/*:log-stream:*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ssm:PutParameter"
+            ],
+            "Resource": "arn:aws:ssm:*:*:parameter/CodeBuild/*"
+        }
+    ]
+}
+POLICY
 }
