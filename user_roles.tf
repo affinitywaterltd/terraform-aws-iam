@@ -475,7 +475,7 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
                 "iam:ListSSHPublicKeys",
                 "iam:ListServiceSpecificCredentials"
             ],
-            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+            "Resource": "arn:aws:iam::*:user/${aws:username}"
         },
         {
             "Sid": "IAMUserSSHKeys",
@@ -487,7 +487,7 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
                 "iam:UpdateSSHPublicKey",
                 "iam:UploadSSHPublicKey"
             ],
-            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+            "Resource": "arn:aws:iam::*:user/${aws:username}"
         },
         {
             "Sid": "IAMSelfManageServiceSpecificCredentials",
@@ -498,7 +498,7 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
                 "iam:DeleteServiceSpecificCredential",
                 "iam:ResetServiceSpecificCredential"
             ],
-            "Resource": "arn:aws:iam::*:user/\$\{aws:username}"
+            "Resource": "arn:aws:iam::*:user/${aws:username}"
         },
         {
             "Action": "codedeploy:*",
