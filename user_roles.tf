@@ -392,7 +392,7 @@ resource "aws_iam_policy" "dev_iam_create_policy" {
 } 
 POLICY
 }
-
+/*
 resource "aws_iam_role_policy_attachment" "dev_iam_code_services_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "${aws_iam_policy.dev_iam_code_services_policy.arn}"
@@ -571,3 +571,4 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
 }
 POLICY
 }
+*/
