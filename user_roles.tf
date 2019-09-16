@@ -330,15 +330,16 @@ resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
+  role       = "${aws_iam_role.dev_ops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
+}
+
+
 /*
 resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codedeploy_role_policy_attach" {
@@ -407,99 +408,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
 {
     "Version": "2012-10-17",
     "Statement": [
-        {
-            "Effect": "Allow",
-            "Action": [
-                "codecommit:*"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "CloudWatchEventsCodeCommitRulesAccess",
-            "Effect": "Allow",
-            "Action": [
-                "events:DeleteRule",
-                "events:DescribeRule",
-                "events:DisableRule",
-                "events:EnableRule",
-                "events:PutRule",
-                "events:PutTargets",
-                "events:RemoveTargets",
-                "events:ListTargetsByRule"
-            ],
-            "Resource": "arn:aws:events:*:*:rule/codecommit*"
-        },
-        {
-            "Sid": "SNSTopicAndSubscriptionAccess",
-            "Effect": "Allow",
-            "Action": [
-                "sns:CreateTopic",
-                "sns:DeleteTopic",
-                "sns:Subscribe",
-                "sns:Unsubscribe",
-                "sns:SetTopicAttributes"
-            ],
-            "Resource": "arn:aws:sns:*:*:codecommit*"
-        },
-        {
-            "Sid": "SNSTopicAndSubscriptionReadAccess",
-            "Effect": "Allow",
-            "Action": [
-                "sns:ListTopics",
-                "sns:ListSubscriptionsByTopic",
-                "sns:GetTopicAttributes"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "LambdaReadOnlyListAccess",
-            "Effect": "Allow",
-            "Action": [
-                "lambda:ListFunctions"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "IAMReadOnlyListAccess",
-            "Effect": "Allow",
-            "Action": [
-                "iam:ListUsers"
-            ],
-            "Resource": "*"
-        },
-        {
-            "Sid": "IAMReadOnlyConsoleAccess",
-            "Effect": "Allow",
-            "Action": [
-                "iam:ListAccessKeys",
-                "iam:ListSSHPublicKeys",
-                "iam:ListServiceSpecificCredentials"
-            ],
-            "Resource": "arn:aws:iam::*:user/$${aws:username}"
-        },
-        {
-            "Sid": "IAMUserSSHKeys",
-            "Effect": "Allow",
-            "Action": [
-                "iam:DeleteSSHPublicKey",
-                "iam:GetSSHPublicKey",
-                "iam:ListSSHPublicKeys",
-                "iam:UpdateSSHPublicKey",
-                "iam:UploadSSHPublicKey"
-            ],
-            "Resource": "arn:aws:iam::*:user/$${aws:username}"
-        },
-        {
-            "Sid": "IAMSelfManageServiceSpecificCredentials",
-            "Effect": "Allow",
-            "Action": [
-                "iam:CreateServiceSpecificCredential",
-                "iam:UpdateServiceSpecificCredential",
-                "iam:DeleteServiceSpecificCredential",
-                "iam:ResetServiceSpecificCredential"
-            ],
-            "Resource": "arn:aws:iam::*:user/$${aws:username}"
-        },
         {
             "Action": "codedeploy:*",
             "Effect": "Allow",
