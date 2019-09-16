@@ -404,7 +404,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
   description = "Allows Devs permissions from the following roles: AWSCodeCommitFullAccess"
 
   policy      = <<POLICY
-
 {
     "Version": "2012-10-17",
     "Statement": [
