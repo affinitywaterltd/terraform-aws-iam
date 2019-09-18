@@ -438,7 +438,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "ec2:StartInstances"
+                "ec2:StartInstances",
+                "ec2:DescribeInstances"
             ],
             "Resource": "*"
         }
