@@ -439,7 +439,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
             "Effect": "Allow",
             "Action": [
                 "ec2:StartInstances",
-                "ec2:DescribeInstances"
+                "ec2:DescribeInstances",
+                "ec2:DescribeInstanceStatus"
             ],
             "Resource": "*"
         }
