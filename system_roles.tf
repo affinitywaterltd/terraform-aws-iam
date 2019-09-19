@@ -449,6 +449,38 @@ resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
 EOF
 }
 
+
+# SSM CreateImage
+resource "aws_iam_role" "ssm_maintenance_window_create_image_role" {
+  name = "ssm-maintenance-window-create-image-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_create_image_attach" {
+  role       = "${aws_iam_role.ssm_maintenance_window_create_image_role.name}"
+  policy_arn = "${aws_iam_policy.ssm_maintenance_window_create_image.arn}"
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_create_image" {
+  name = "ssm-maintenance-window-create-image"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": [
+                "ec2:CreateImage"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
 # Lambda Citrix Tagging Role
 resource "aws_iam_role" "lambda_ec2_tagging_citrix_mcs_servers_role" {
   name = "lambda-ec2-tagging-citrix-mcs-servers-role"

@@ -37,3 +37,13 @@ output "sophos_central_aws" {
   description = "Sophos Central Console Connector Role"
   value       = "${aws_iam_role.sophos_central_aws.arn}"
 } 
+
+output "ssm_maintenance_window_create_image_role" {
+  description = "IAM role used by CreateImage automation task"
+  value       = "${aws_iam_role.ssm_maintenance_window_create_image_role.arn}"
+} 
+
+output "ssm_maintenance_window_start_instances" {
+  description = "IAM role used by StartStoppedInstances automation task"
+  value       = "${aws_iam_role.ssm_maintenance_window_start_instances.arn}"
+} 
