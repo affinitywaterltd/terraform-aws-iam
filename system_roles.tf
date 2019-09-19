@@ -472,7 +472,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_create_image" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "ec2:CreateImage"
+                "ec2:CreateImage",
+                "ec2:DescribeImages"
             ],
             "Resource": "*"
         }
