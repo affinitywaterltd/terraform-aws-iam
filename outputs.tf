@@ -43,7 +43,7 @@ output "ssm_maintenance_window_create_image_role" {
   value       = "${aws_iam_role.ssm_maintenance_window_create_image_role.arn}"
 } 
 
-output "ssm_maintenance_window_start_instances" {
+output "ssm_maintenance_window_start_instance_role" {
   description = "IAM role used by StartStoppedInstances automation task"
-  value       = "${aws_iam_role.ssm_maintenance_window_start_instances.arn}"
+  value       = "${aws_iam_role.ssm_maintenance_window_start_instance_role.arn}"
 } 
