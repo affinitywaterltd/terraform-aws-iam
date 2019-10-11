@@ -123,6 +123,10 @@ resource "aws_iam_role_policy_attachment" "dba_awsbackup_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "dba_awswellarchitected_policy_attach" {
+  role       = "${aws_iam_role.dba_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/WellArchitectedConsoleFullAccess"
+}
 
 resource "aws_iam_policy" "dba_dbmigration_policy" {
   name        = "DB_Migration_Service"
