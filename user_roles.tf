@@ -421,6 +421,7 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
                 "codepipeline:*",
                 "cloudformation:DescribeStacks",
                 "cloudformation:ListChangeSets",
+                "cloudformation:DeleteStack",
                 "cloudtrail:CreateTrail",
                 "cloudtrail:DescribeTrails",
                 "cloudtrail:GetEventSelectors",
