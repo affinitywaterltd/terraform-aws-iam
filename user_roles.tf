@@ -210,97 +210,6 @@ resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
 }
 
 
-/*
-resource "aws_iam_role_policy_attachment" "dba_redshift_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "dba_rds_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "dba_sns_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
-}
-
-resource "aws_iam_policy" "dba_dbmigration_policy" {
-  name        = "DBAMigrationService"
-  description = "Allows DBAs to use Database Migration Service"
-
-  policy      = <<POLICY
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Sid": "VisualEditor0",
-            "Effect": "Allow",
-            "Action": [
-                "iam:GetRole",
-                "logs:DescribeLogGroups",
-                "logs:DescribeLogStreams",
-                "cloudwatch:List*",
-                "redshift:ModifyClusterIamRoles",
-                "iam:CreateRole",
-                "iam:AttachRolePolicy",
-                "dms:*",
-                "iam:PassRole",
-                "redshift:Describe*",
-                "kms:ListAliases",
-                "logs:GetLogEvents",
-                "kms:DescribeKey",
-                "logs:FilterLogEvents",
-                "cloudwatch:Get*"
-            ],
-            "Resource": "*"
-        }
-    ]
-}
-POLICY
-}
-
-resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "${aws_iam_policy.dba_dbmigration_policy.arn}"
-}
-
-
-resource "aws_iam_policy" "dba_parametergroup_policy" {
-  name        = "DBAParameterGroup"
-  description = "Allows DBAs to create and assign parameter groups"
-
-  policy      = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Action": "iam:*",
-            "Effect": "Allow",
-            "Resource": "arn:aws:iam::*:role/aws-service-role/rds.amazonaws.com/AWSServiceRoleForRDS",
-            "Condition": {
-                "StringLike": {
-                    "iam:AWSServiceName": "rds.amazonaws.com"
-                }
-            }
-        }
-    ]
-}
-EOF
-}
-
-resource "aws_iam_role_policy_attachment" "dba_rds_parameter_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "${aws_iam_policy.dba_parametergroup_policy.arn}"
-}
-*/
-
 
 ### ReadOnlyRole
 
@@ -574,5 +483,66 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
         }
     ]
 }
+POLICY
+}
+
+# Code Commit Restrcted Pull Requests
+
+data "aws_iam_group" "codecommit_enforcefullrequests_iam_group" {
+  group_name = "codecommit_enforcefullrequests"
+}
+
+resource "aws_iam_group_policy_attachment" "codecommit_enforcefullrequests_iam_group_attachment" {
+  group      = "${aws_iam_group.codecommit_enforcefullrequests_iam_group.name}"
+  policy_arn = "${aws_iam_policy.codecommit_enforcefullrequests_iam_policy.arn}"
+}
+
+resource "aws_iam_policy" "codecommit_enforcefullrequests_iam_policy" {
+  name        = "codecommit_enforcefullrequests_iam_policy"
+  description = "Enforces developers to perform a pull request if the CodeCommit is tagged"
+
+  policy      = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Action": [
+                "codecommit:DeleteBranch",
+                "codecommit:PutFile",
+                "codecommit:MergeBranchesByFastForward",
+                "codecommit:MergeBranchesBySquash",
+                "codecommit:MergeBranchesByThreeWay"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIfExists": {
+                    "codecommit:References": [
+                        "refs/heads/master",
+                        "refs/heads/PreProd",
+                        "refs/heads/UAT",
+                        "refs/heads/Development"
+                    ]
+                },
+                "Null": {
+                    "codecommit:References": false
+                }
+            }
+        },
+        {
+            "Effect": "Deny",
+            "Action": [
+                "codecommit:GitPush"
+            ],
+            "Resource": "*",
+            "Condition": {
+                "StringEqualsIgnoreCase": {
+                    "aws:ResourceTag/EnforcePullRequests": "true"
+                }
+            }
+        }
+    ]
+}
+
 POLICY
 }
