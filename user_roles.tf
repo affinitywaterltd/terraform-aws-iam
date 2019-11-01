@@ -488,7 +488,7 @@ POLICY
 
 # Code Commit Restrcted Pull Requests
 
-data "aws_iam_group" "codecommit_enforcefullrequests_iam_group" {
+resource "aws_iam_group" "codecommit_enforcefullrequests_iam_group" {
   group_name = "codecommit_enforcefullrequests"
 }
 
