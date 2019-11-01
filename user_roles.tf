@@ -503,46 +503,35 @@ resource "aws_iam_policy" "codecommit_enforcefullrequests_iam_policy" {
 
   policy      = <<POLICY
 {
-    "Version": "2012-10-17",
-    "Statement": [
-        {
-            "Effect": "Deny",
-            "Action": [
-                "codecommit:DeleteBranch",
-                "codecommit:PutFile",
-                "codecommit:MergeBranchesByFastForward",
-                "codecommit:MergeBranchesBySquash",
-                "codecommit:MergeBranchesByThreeWay"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "StringEqualsIfExists": {
-                    "codecommit:References": [
-                        "refs/heads/master",
-                        "refs/heads/PreProd",
-                        "refs/heads/UAT",
-                        "refs/heads/Development"
-                    ]
-                },
-                "Null": {
-                    "codecommit:References": false
-                }
-            }
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Deny",
+      "Action": [
+        "codecommit:GitPush",
+        "codecommit:DeleteBranch",
+        "codecommit:PutFile",
+        "codecommit:MergeBranchesByFastForward",
+        "codecommit:MergeBranchesBySquash",
+        "codecommit:MergeBranchesByThreeWay"
+      ],
+      "Resource": "*",
+      "Condition": {
+        "StringEqualsIgnoreCaseIfExists": {
+          "codecommit:References": [
+            "refs/heads/master",
+            "refs/heads/prod",
+            "refs/heads/preprod",
+            "refs/heads/uat",
+            "refs/heads/development"
+          ]
         },
-        {
-            "Effect": "Deny",
-            "Action": [
-                "codecommit:GitPush"
-            ],
-            "Resource": "*",
-            "Condition": {
-                "StringEqualsIgnoreCase": {
-                    "aws:ResourceTag/EnforcePullRequests": "true"
-                }
-            }
+        "Null": {
+          "codecommit:References": false
         }
-    ]
+      }
+    }
+  ]
 }
-
 POLICY
 }
