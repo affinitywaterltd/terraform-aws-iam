@@ -68,6 +68,28 @@ resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
   policy_arn = "${aws_iam_policy.ec2_tags_create.arn}"
 }
 
+resource "aws_iam_policy" "iam_assume_role" {
+  name = "Allow Assume Role"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor0",
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "iam_assume_role_policy_attach" {
+  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  policy_arn = "${aws_iam_policy.iam_assume_role.arn}"
+}
+
 
 resource "aws_iam_policy" "ec2_snapshot" {
   name = "EC2Snapshot"
