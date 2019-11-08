@@ -69,7 +69,7 @@ resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
 }
 
 resource "aws_iam_policy" "iam_assume_role" {
-  name = "Allow Assume Role"
+  name = "iam_assume_role"
   policy = <<EOF
 {
     "Version": "2012-10-17",
