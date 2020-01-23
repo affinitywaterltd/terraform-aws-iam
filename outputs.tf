@@ -47,3 +47,13 @@ output "ssm_maintenance_window_start_instance_role" {
   description = "IAM role used by StartStoppedInstances automation task"
   value       = "${aws_iam_role.ssm_maintenance_window_start_instance_role.arn}"
 } 
+
+output "rds_enhanced_monitoring_role" {
+  description = "IAM role used for RDS Enhanced Monitoring"
+  value       = "${aws_iam_role.rds_enhanced_monitoring_role.arn}"
+} 
+
+
+
+
+
