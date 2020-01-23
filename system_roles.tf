@@ -655,13 +655,13 @@ resource "aws_iam_role_policy_attachment" "app_grafana_policy_attachment" {
 #
 
 
-data "aws_iam_policy_document" "rds_assume_role_policy" {
+data "aws_iam_policy_document" "rds_monitoring_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
 
     principals {
       type        = "Service"
-      identifiers = ["rds.amazonaws.com"]
+      identifiers = ["monitoring.rds.amazonaws.com"]
     }
   }
 }
@@ -669,7 +669,7 @@ data "aws_iam_policy_document" "rds_assume_role_policy" {
 resource "aws_iam_role" "rds_enhanced_monitoring_role" {
   name = "rds-enhanced-monitoring-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+  assume_role_policy = "${data.aws_iam_policy_document.rds_monitoring_assume_role_policy.json}"
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_role_attach" {
