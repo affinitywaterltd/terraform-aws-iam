@@ -711,3 +711,8 @@ resource "aws_iam_role_policy_attachment" "elasticbeanstalk_ec2_role_attach" {
   role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
+
+resource "aws_iam_role_policy_attachment" "elasticbeanstalk_ec2_role_attach" {
+  role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkService"
+}
