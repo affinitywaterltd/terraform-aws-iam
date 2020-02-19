@@ -57,3 +57,9 @@ output "elasticbeanstalk_ec2_role" {
   description = "IAM role used for ElasticBeanstalk EC2"
   value       = "${aws_iam_role.elasticbeanstalk_ec2_role.arn}"
 } 
+
+
+output "elasticbeanstalk_service_role" {
+  description = "IAM role used for ElasticBeanstalk Service"
+  value       = "${aws_iam_role.elasticbeanstalk_service_role.arn}"
+} 
