@@ -359,8 +359,9 @@ resource "aws_iam_role_policy_attachment" "config" {
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
 }
 
-
+#
 # SSM Maintenance Window snapshot cleanup role
+#
 resource "aws_iam_role" "lambda_snapshot_cleanup_role" {
   name = "lambda-snapshot-cleanup-role"
 
@@ -393,7 +394,9 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
 EOF
 }
 
+#
 # SSM Maintenance Window Updates
+#
 resource "aws_iam_role" "lambda_maintenance_window_update_role" {
   name = "lambda-maintenance-window-update-role"
 
@@ -427,8 +430,9 @@ resource "aws_iam_policy" "ssm_maintenance_window_update" {
 EOF
 }
 
+#
 # SSM Start Instances
-
+#
 data "aws_iam_policy_document" "ssm_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -472,7 +476,9 @@ EOF
 }
 
 
+#
 # SSM CreateImage
+#
 resource "aws_iam_role" "ssm_maintenance_window_create_image_role" {
   name = "ssm-maintenance-window-create-image-role"
 
@@ -504,7 +510,10 @@ resource "aws_iam_policy" "ssm_maintenance_window_create_image" {
 EOF
 }
 
+
+#
 # Lambda Citrix Tagging Role
+#
 resource "aws_iam_role" "lambda_ec2_tagging_citrix_mcs_servers_role" {
   name = "lambda-ec2-tagging-citrix-mcs-servers-role"
 
@@ -537,7 +546,9 @@ resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
 EOF
 }
 
+#
 # CloudWatchLog Expiration Role
+#
 resource "aws_iam_role" "lambda_cloudwatch_logs_expiration_role" {
   name = "lambda-cloudwatch-logs-expiration-role"
 
@@ -573,7 +584,9 @@ EOF
 }
 
 
+#
 # Cloudwatch Monitoring Access
+#
 resource "aws_iam_role" "app_grafana_cloudwatch_read_role" {
   name               = "app_grafana_cloudwatch_read_role"
 assume_role_policy = <<POLICY
@@ -603,8 +616,6 @@ assume_role_policy = <<POLICY
 }
 POLICY
 }
-
-
 
 resource "aws_iam_policy" "app_grafana_policy" {
   name = "app_grafana_policy"
@@ -653,8 +664,6 @@ resource "aws_iam_role_policy_attachment" "app_grafana_policy_attachment" {
 #
 # RDS Database Enhanced Monitoring Role
 #
-
-
 data "aws_iam_policy_document" "rds_monitoring_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -665,7 +674,6 @@ data "aws_iam_policy_document" "rds_monitoring_assume_role_policy" {
     }
   }
 }
-
 resource "aws_iam_role" "rds_enhanced_monitoring_role" {
   name = "rds-enhanced-monitoring-role"
 
@@ -678,12 +686,9 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_role_attach" 
 }
 
 
-
 #
-# ElasticBeanstalk Role
+# ElasticBeanstalk EC2 Role
 #
-
-
 data "aws_iam_policy_document" "elasticbeanstalk_ec2_assume_role_policy" {
   statement {
     actions = ["sts:AssumeRole"]
@@ -706,13 +711,32 @@ resource "aws_iam_instance_profile" "elasticbeanstalk_ec2_instance_profile" {
   role = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
 }
 
-
 resource "aws_iam_role_policy_attachment" "elasticbeanstalk_ec2_role_attach" {
   role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 
-resource "aws_iam_role_policy_attachment" "elasticbeanstalk_service_ec2_role_attach" {
-  role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+#
+# ElasticBeanbstalk Service Role
+#
+data "aws_iam_policy_document" "elasticbeanstalk_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["elasticbeanstalk.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "elasticbeanstalk_service_role" {
+  name = "elasticbeanstalk-service-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.elasticbeanstalk_assume_role_policy.json}"
+}
+
+resource "aws_iam_role_policy_attachment" "elasticbeanstalk_service_role_attach" {
+  role       = "${aws_iam_role.elasticbeanstalk_service_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"
 }
