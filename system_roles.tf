@@ -676,3 +676,38 @@ resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_role_attach" 
   role       = "${aws_iam_role.rds_enhanced_monitoring_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
+
+
+
+#
+# ElasticBeanstalk Role
+#
+
+
+data "aws_iam_policy_document" "elasticbeanstalk_ec2_assume_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ec2.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "elasticbeanstalk_ec2_role" {
+  name = "elasticbeanstalk-ec2-role"
+
+  assume_role_policy = "${data.aws_iam_policy_document.elasticbeanstalk_ec2_assume_role_policy.json}"
+}
+
+resource "aws_iam_instance_profile" "elasticbeanstalk_ec2_instance_profile" {
+  name = "elasticbeanstalk-ec2-instance-profile"
+  role = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+}
+
+
+resource "aws_iam_role_policy_attachment" "elasticbeanstalk_ec2_role_attach" {
+  role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
+}

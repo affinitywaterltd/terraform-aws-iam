@@ -53,7 +53,7 @@ output "rds_enhanced_monitoring_role" {
   value       = "${aws_iam_role.rds_enhanced_monitoring_role.arn}"
 } 
 
-
-
-
-
+output "elasticbeanstalk_ec2_role" {
+  description = "IAM role used for ElasticBeanstalk EC2"
+  value       = "${aws_iam_role.elasticbeanstalk_ec2_role.arn}"
+} 
