@@ -34,6 +34,7 @@ data "aws_iam_policy_document" "SSO_trust" {
   }
 }
 
+
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
@@ -92,7 +93,7 @@ resource "aws_iam_role_policy_attachment" "sysops_support_policy_attach" {
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
   role       = "${aws_iam_role.sysops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AWSBackupFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
@@ -103,6 +104,11 @@ resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
 resource "aws_iam_role_policy_attachment" "sysops_awsbeanstalk_policy_attach" {
   role       = "${aws_iam_role.sysops_role.name}"
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_resourcegroups_policy_attach" {
+  role       = "${aws_iam_role.sysops_role.name}"
+  policy_arn = "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorFullAccess"
 }
 
 # DBA Role
