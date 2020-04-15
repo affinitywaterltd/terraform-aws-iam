@@ -1,13 +1,13 @@
 #### Citrix Machine Creation ####
 
 resource "aws_iam_user" "citrix_machine_creation" {
-  name               = "CitrixMachineCreation"
-  force_destroy      = true
+  name          = "CitrixMachineCreation"
+  force_destroy = true
 }
 
 resource "aws_iam_user_policy" "citrix_machine_creation" {
   name = "CitrixMachineCreation"
-  user = "${aws_iam_user.citrix_machine_creation.name}"
+  user = aws_iam_user.citrix_machine_creation.name
 
   policy = <<EOF
 {
@@ -64,16 +64,17 @@ resource "aws_iam_user_policy" "citrix_machine_creation" {
   ]
 }
 EOF
+
 }
 
 #SES User
 resource "aws_iam_user" "ses_smtp_user" {
-  name               = "ses_smtp_user"
-  force_destroy      = true
+  name          = "ses_smtp_user"
+  force_destroy = true
 }
 
 resource "aws_iam_user_policy" "ses_smtp_user" {
-  user       = "${aws_iam_user.ses_smtp_user.name}"
+  user = aws_iam_user.ses_smtp_user.name
   name = "SesSendingAccess"
 
   policy = <<EOF
@@ -88,4 +89,6 @@ resource "aws_iam_user_policy" "ses_smtp_user" {
     ]
 }
 EOF
+
 }
+

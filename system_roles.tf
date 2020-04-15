@@ -22,32 +22,33 @@ resource "aws_iam_role" "ec2_ssm_role" {
     }
   ]
 }
- EOF
+ 
+EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_ssm_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  role       = aws_iam_role.ec2_ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_read_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  role       = aws_iam_role.ec2_ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sns_full_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
+  role       = aws_iam_role.ec2_ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
 
 resource "aws_iam_instance_profile" "ec2_ssm_role" {
   name = "ssm_role"
-  role = "${aws_iam_role.ec2_ssm_role.name}"
+  role = aws_iam_role.ec2_ssm_role.name
 }
 
-
 resource "aws_iam_policy" "ec2_tags_create" {
-  name = "EC2TagsCreate"
+  name   = "EC2TagsCreate"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -61,15 +62,16 @@ resource "aws_iam_policy" "ec2_tags_create" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
-  policy_arn = "${aws_iam_policy.ec2_tags_create.arn}"
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = aws_iam_policy.ec2_tags_create.arn
 }
 
 resource "aws_iam_policy" "iam_assume_role" {
-  name = "iam_assume_role"
+  name   = "iam_assume_role"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -83,16 +85,16 @@ resource "aws_iam_policy" "iam_assume_role" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "iam_assume_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
-  policy_arn = "${aws_iam_policy.iam_assume_role.arn}"
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = aws_iam_policy.iam_assume_role.arn
 }
 
-
 resource "aws_iam_policy" "ec2_snapshot" {
-  name = "EC2Snapshot"
+  name   = "EC2Snapshot"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -111,10 +113,11 @@ resource "aws_iam_policy" "ec2_snapshot" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_policy" "s3_bucket_ssm_scripts" {
-  name = "S3SSMScripts"
+  name   = "S3SSMScripts"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -128,16 +131,17 @@ resource "aws_iam_policy" "s3_bucket_ssm_scripts" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "s3_bucket_ssm_scripts_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
-  policy_arn = "${aws_iam_policy.s3_bucket_ssm_scripts.arn}"
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = aws_iam_policy.s3_bucket_ssm_scripts.arn
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_snapshot_role_policy_attach" {
-  role       = "${aws_iam_role.ec2_ssm_role.name}"
-  policy_arn = "${aws_iam_policy.ec2_snapshot.arn}"
+  role       = aws_iam_role.ec2_ssm_role.name
+  policy_arn = aws_iam_policy.ec2_snapshot.arn
 }
 
 ###############
@@ -162,26 +166,23 @@ data "aws_iam_policy_document" "lambda_assume_role_policy" {
 resource "aws_iam_role" "lambda_reporting_role" {
   name = "Lambda_Reporting"
 
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_readonly_policy_attach" {
-  role       = "${aws_iam_role.lambda_reporting_role.name}"
+  role       = aws_iam_role.lambda_reporting_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_ses_policy_attach" {
-  role       = "${aws_iam_role.lambda_reporting_role.name}"
+  role       = aws_iam_role.lambda_reporting_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSESFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attach" {
-role = "${aws_iam_role.lambda_reporting_role.name}"
-policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
+  role       = aws_iam_role.lambda_reporting_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
-
-
-
 
 ###############
 #SSM
@@ -193,8 +194,6 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
   aws_service_name = "ssm.amazonaws.com"
 }
 
-
-
 ###################
 #Sophos-Central-AWS
 ###################
@@ -204,8 +203,8 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 resource "aws_iam_role" "sophos_central_aws" {
   name = "Sophos-Central-AWS"
   lifecycle {
-    ignore_changes = ["assume_role_policy"]
-    } 
+    ignore_changes = [assume_role_policy]
+  }
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -225,9 +224,11 @@ resource "aws_iam_role" "sophos_central_aws" {
   ]
 }
 EOF
+
 }
+
 resource "aws_iam_policy" "sophos_central_aws" {
-  name = "sophos_central_aws"
+  name   = "sophos_central_aws"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -257,12 +258,13 @@ resource "aws_iam_policy" "sophos_central_aws" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "sophos_central_aws_role_policy_attach" {
-  role       = "${aws_iam_role.sophos_central_aws.name}"
-  policy_arn = "${aws_iam_policy.sophos_central_aws.arn}"
-} 
+  role       = aws_iam_role.sophos_central_aws.name
+  policy_arn = aws_iam_policy.sophos_central_aws.arn
+}
 
 ###################
 #ADC-Citrix-Smart-Scale
@@ -273,8 +275,8 @@ resource "aws_iam_role_policy_attachment" "sophos_central_aws_role_policy_attach
 resource "aws_iam_role" "citrix_smart_scale" {
   name = "Citrix-ADC-SmartScale"
   lifecycle {
-    ignore_changes = ["assume_role_policy"]
-    } 
+    ignore_changes = [assume_role_policy]
+  }
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -289,9 +291,11 @@ resource "aws_iam_role" "citrix_smart_scale" {
   ]
 }
 EOF
+
 }
+
 resource "aws_iam_policy" "citrix_smart_scale" {
-  name = "Citrix-ADC-SmartScale-pol"
+  name   = "Citrix-ADC-SmartScale-pol"
   policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -319,16 +323,17 @@ resource "aws_iam_policy" "citrix_smart_scale" {
   ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "citrix_smart_scale_role_policy_attach" {
-  role       = "${aws_iam_role.citrix_smart_scale.name}"
-  policy_arn = "${aws_iam_policy.citrix_smart_scale.arn}"
-} 
- 
- resource "aws_iam_instance_profile" "citrix_smart_scale_role" {
+  role       = aws_iam_role.citrix_smart_scale.name
+  policy_arn = aws_iam_policy.citrix_smart_scale.arn
+}
+
+resource "aws_iam_instance_profile" "citrix_smart_scale_role" {
   name = "Citrix-ADC-SmartScale"
-  role = "${aws_iam_role.citrix_smart_scale.name}"
+  role = aws_iam_role.citrix_smart_scale.name
 }
 
 # -----------------------------------------------------------
@@ -352,10 +357,11 @@ resource "aws_iam_role" "config" {
   ]
 }
 POLICY
+
 }
 
 resource "aws_iam_role_policy_attachment" "config" {
-  role       = "${aws_iam_role.config.name}"
+  role       = aws_iam_role.config.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSConfigRole"
 }
 
@@ -365,16 +371,16 @@ resource "aws_iam_role_policy_attachment" "config" {
 resource "aws_iam_role" "lambda_snapshot_cleanup_role" {
   name = "lambda-snapshot-cleanup-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_snapshot_cleaup_policy_attach" {
-  role       = "${aws_iam_role.lambda_snapshot_cleanup_role.name}"
-  policy_arn = "${aws_iam_policy.ec2_cleanup_snapshot.arn}"
+  role       = aws_iam_role.lambda_snapshot_cleanup_role.name
+  policy_arn = aws_iam_policy.ec2_cleanup_snapshot.arn
 }
 
 resource "aws_iam_policy" "ec2_cleanup_snapshot" {
-  name = "ec2-cleanup-snapshot"
+  name   = "ec2-cleanup-snapshot"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -392,6 +398,7 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
     ]
 }
 EOF
+
 }
 
 #
@@ -400,16 +407,16 @@ EOF
 resource "aws_iam_role" "lambda_maintenance_window_update_role" {
   name = "lambda-maintenance-window-update-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_maintenance_window_update_attach" {
-  role       = "${aws_iam_role.lambda_maintenance_window_update_role.name}"
-  policy_arn = "${aws_iam_policy.ssm_maintenance_window_update.arn}"
+  role       = aws_iam_role.lambda_maintenance_window_update_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_update.arn
 }
 
 resource "aws_iam_policy" "ssm_maintenance_window_update" {
-  name = "ssm-maintenance-window-update"
+  name   = "ssm-maintenance-window-update"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -428,6 +435,7 @@ resource "aws_iam_policy" "ssm_maintenance_window_update" {
     ]
 }
 EOF
+
 }
 
 #
@@ -443,19 +451,20 @@ data "aws_iam_policy_document" "ssm_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "ssm_maintenance_window_start_instance_role" {
   name = "ssm-maintenance-window-start-instance-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.ssm_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
-  role       = "${aws_iam_role.ssm_maintenance_window_start_instance_role.name}"
-  policy_arn = "${aws_iam_policy.ssm_maintenance_window_start_instances.arn}"
+  role       = aws_iam_role.ssm_maintenance_window_start_instance_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_start_instances.arn
 }
 
 resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
-  name = "ssm-maintenance-window-start-instances"
+  name   = "ssm-maintenance-window-start-instances"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -473,8 +482,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_start_instances" {
     ]
 }
 EOF
-}
 
+}
 
 #
 # SSM CreateImage
@@ -482,16 +491,16 @@ EOF
 resource "aws_iam_role" "ssm_maintenance_window_create_image_role" {
   name = "ssm-maintenance-window-create-image-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.ssm_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.ssm_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_create_image_attach" {
-  role       = "${aws_iam_role.ssm_maintenance_window_create_image_role.name}"
-  policy_arn = "${aws_iam_policy.ssm_maintenance_window_create_image.arn}"
+  role       = aws_iam_role.ssm_maintenance_window_create_image_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_create_image.arn
 }
 
 resource "aws_iam_policy" "ssm_maintenance_window_create_image" {
-  name = "ssm-maintenance-window-create-image"
+  name   = "ssm-maintenance-window-create-image"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -508,8 +517,8 @@ resource "aws_iam_policy" "ssm_maintenance_window_create_image" {
     ]
 }
 EOF
-}
 
+}
 
 #
 # Lambda Citrix Tagging Role
@@ -517,16 +526,16 @@ EOF
 resource "aws_iam_role" "lambda_ec2_tagging_citrix_mcs_servers_role" {
   name = "lambda-ec2-tagging-citrix-mcs-servers-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_ec2_tagging_citrix_mcs_servers_role_attach" {
-  role       = "${aws_iam_role.lambda_ec2_tagging_citrix_mcs_servers_role.name}"
-  policy_arn = "${aws_iam_policy.lambda_ec2_tagging_citrix_mcs_servers_policy.arn}"
+  role       = aws_iam_role.lambda_ec2_tagging_citrix_mcs_servers_role.name
+  policy_arn = aws_iam_policy.lambda_ec2_tagging_citrix_mcs_servers_policy.arn
 }
 
 resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
-  name = "lambda-ec2-tagging-citrix-mcs-servers"
+  name   = "lambda-ec2-tagging-citrix-mcs-servers"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -544,6 +553,7 @@ resource "aws_iam_policy" "lambda_ec2_tagging_citrix_mcs_servers_policy" {
     ]
 }
 EOF
+
 }
 
 #
@@ -552,16 +562,16 @@ EOF
 resource "aws_iam_role" "lambda_cloudwatch_logs_expiration_role" {
   name = "lambda-cloudwatch-logs-expiration-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.lambda_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_cloudwatch_logs_expiration_attach" {
-  role       = "${aws_iam_role.lambda_cloudwatch_logs_expiration_role.name}"
-  policy_arn = "${aws_iam_policy.lambda_cloudwatch_logs_expiration_policy.arn}"
+  role       = aws_iam_role.lambda_cloudwatch_logs_expiration_role.name
+  policy_arn = aws_iam_policy.lambda_cloudwatch_logs_expiration_policy.arn
 }
 
 resource "aws_iam_policy" "lambda_cloudwatch_logs_expiration_policy" {
-  name = "lambda-cloudwatch-logs-expiration"
+  name   = "lambda-cloudwatch-logs-expiration"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -581,15 +591,15 @@ resource "aws_iam_policy" "lambda_cloudwatch_logs_expiration_policy" {
     ]
 }
 EOF
-}
 
+}
 
 #
 # Cloudwatch Monitoring Access
 #
 resource "aws_iam_role" "app_grafana_cloudwatch_read_role" {
   name               = "app_grafana_cloudwatch_read_role"
-assume_role_policy = <<POLICY
+  assume_role_policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -615,10 +625,11 @@ assume_role_policy = <<POLICY
     ]
 }
 POLICY
+
 }
 
 resource "aws_iam_policy" "app_grafana_policy" {
-  name = "app_grafana_policy"
+  name   = "app_grafana_policy"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -653,13 +664,13 @@ resource "aws_iam_policy" "app_grafana_policy" {
     ]
 }
 EOF
+
 }
 
 resource "aws_iam_role_policy_attachment" "app_grafana_policy_attachment" {
-  role       = "${aws_iam_role.app_grafana_cloudwatch_read_role.name}"
-  policy_arn = "${aws_iam_policy.app_grafana_policy.arn}"
+  role       = aws_iam_role.app_grafana_cloudwatch_read_role.name
+  policy_arn = aws_iam_policy.app_grafana_policy.arn
 }
-
 
 #
 # RDS Database Enhanced Monitoring Role
@@ -674,17 +685,17 @@ data "aws_iam_policy_document" "rds_monitoring_assume_role_policy" {
     }
   }
 }
+
 resource "aws_iam_role" "rds_enhanced_monitoring_role" {
   name = "rds-enhanced-monitoring-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.rds_monitoring_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.rds_monitoring_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "rds_enhanced_monitoring_role_attach" {
-  role       = "${aws_iam_role.rds_enhanced_monitoring_role.name}"
+  role       = aws_iam_role.rds_enhanced_monitoring_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonRDSEnhancedMonitoringRole"
 }
-
 
 #
 # ElasticBeanstalk EC2 Role
@@ -703,16 +714,16 @@ data "aws_iam_policy_document" "elasticbeanstalk_ec2_assume_role_policy" {
 resource "aws_iam_role" "elasticbeanstalk_ec2_role" {
   name = "elasticbeanstalk-ec2-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.elasticbeanstalk_ec2_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.elasticbeanstalk_ec2_assume_role_policy.json
 }
 
 resource "aws_iam_instance_profile" "elasticbeanstalk_ec2_instance_profile" {
   name = "elasticbeanstalk-ec2-instance-profile"
-  role = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+  role = aws_iam_role.elasticbeanstalk_ec2_role.name
 }
 
 resource "aws_iam_role_policy_attachment" "elasticbeanstalk_ec2_role_attach" {
-  role       = "${aws_iam_role.elasticbeanstalk_ec2_role.name}"
+  role       = aws_iam_role.elasticbeanstalk_ec2_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkWebTier"
 }
 
@@ -733,10 +744,11 @@ data "aws_iam_policy_document" "elasticbeanstalk_assume_role_policy" {
 resource "aws_iam_role" "elasticbeanstalk_service_role" {
   name = "elasticbeanstalk-service-role"
 
-  assume_role_policy = "${data.aws_iam_policy_document.elasticbeanstalk_assume_role_policy.json}"
+  assume_role_policy = data.aws_iam_policy_document.elasticbeanstalk_assume_role_policy.json
 }
 
 resource "aws_iam_role_policy_attachment" "elasticbeanstalk_service_role_attach" {
-  role       = "${aws_iam_role.elasticbeanstalk_service_role.name}"
+  role       = aws_iam_role.elasticbeanstalk_service_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"
 }
+

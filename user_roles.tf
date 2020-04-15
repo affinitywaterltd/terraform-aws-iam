@@ -34,113 +34,112 @@ data "aws_iam_policy_document" "SSO_trust" {
   }
 }
 
-
 # Admin Role
 
 resource "aws_iam_role" "admin_role" {
-  name                  = "AWLAdminRole"
-  assume_role_policy    = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43200
+  name                 = "AWLAdminRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
-  role       = "${aws_iam_role.admin_role.name}"
+  role       = aws_iam_role.admin_role.name
   policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess"
 }
 
 # SysOps Role
 
 resource "aws_iam_role" "sysops_role" {
-  name               = "AWLSysOpsRole"
-  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43200
+  name                 = "AWLSysOpsRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_read_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_ec2full_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_rds_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_amazonmq_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonMQFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_ssm_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_s3_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_support_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbeanstalk_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_resourcegroups_policy_attach" {
-  role       = "${aws_iam_role.sysops_role.name}"
+  role       = aws_iam_role.sysops_role.name
   policy_arn = "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorFullAccess"
 }
 
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
-  name               = "AWLDatabaseAnalystRole"
-  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43200
+  name                 = "AWLDatabaseAnalystRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
+  role       = aws_iam_role.dba_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_admin_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
+  role       = aws_iam_role.dba_role.name
   policy_arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_awsbackup_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
+  role       = aws_iam_role.dba_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_awswellarchitected_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
+  role       = aws_iam_role.dba_role.name
   policy_arn = "arn:aws:iam::aws:policy/WellArchitectedConsoleFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_support_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
+  role       = aws_iam_role.dba_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
@@ -148,7 +147,7 @@ resource "aws_iam_policy" "dba_dbmigration_policy" {
   name        = "DB_Migration_Service"
   description = "Allows DBAs to use Database Migration Service"
 
-  policy      = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -218,52 +217,49 @@ resource "aws_iam_policy" "dba_dbmigration_policy" {
     ]
 } 
 POLICY
+
 }
 
 resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
-  role       = "${aws_iam_role.dba_role.name}"
-  policy_arn = "${aws_iam_policy.dba_dbmigration_policy.arn}"
+  role       = aws_iam_role.dba_role.name
+  policy_arn = aws_iam_policy.dba_dbmigration_policy.arn
 }
-
-
 
 ### ReadOnlyRole
 
 resource "aws_iam_role" "read_only_role" {
-  name               = "AWLReadOnlyRole"
-  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43199
+  name                 = "AWLReadOnlyRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43199
 }
 
 resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
-  role       = "${aws_iam_role.read_only_role.name}"
+  role       = aws_iam_role.read_only_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
-
 
 ### DevOpsRole
 
 resource "aws_iam_role" "dev_ops_role" {
-  name               = "AWLDevOpsRole"
-  assume_role_policy = "${data.aws_iam_policy_document.SSO_trust.json}"
-  max_session_duration  = 43199
+  name                 = "AWLDevOpsRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43199
 }
 
 resource "aws_iam_role_policy_attachment" "dev_s3_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
 }
-
 
 /*
 resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
@@ -282,23 +278,22 @@ resource "aws_iam_role_policy_attachment" "dev_codepipeline_role_policy_attach" 
 }*/
 
 resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_translate_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
 }
 
-
 resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_kinesis_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
+  role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
 }
 
@@ -306,7 +301,7 @@ resource "aws_iam_policy" "dev_iam_create_policy" {
   name        = "dev_create_iam_policy"
   description = "Allows Devs up create IAM policies"
 
-  policy      = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -320,19 +315,19 @@ resource "aws_iam_policy" "dev_iam_create_policy" {
     ]
 } 
 POLICY
+
 }
 
 resource "aws_iam_role_policy_attachment" "dev_iam_code_services_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "${aws_iam_policy.dev_iam_code_services_policy.arn}"
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = aws_iam_policy.dev_iam_code_services_policy.arn
 }
-
 
 resource "aws_iam_policy" "dev_iam_code_services_policy" {
   name        = "dev_iam_code_services_policy"
   description = "Allows Devs permissions from the following roles: AWSCodeCommitFullAccess"
 
-  policy      = <<POLICY
+  policy = <<POLICY
 {
     "Version": "2012-10-17",
     "Statement": [
@@ -500,4 +495,6 @@ resource "aws_iam_policy" "dev_iam_code_services_policy" {
     ]
 }
 POLICY
+
 }
+
