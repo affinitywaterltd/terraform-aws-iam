@@ -110,6 +110,11 @@ resource "aws_iam_role_policy_attachment" "sysops_resourcegroups_policy_attach" 
   policy_arn = "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_elastisearch_policy_attach" {
+  role       = aws_iam_role.sysops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess"
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
