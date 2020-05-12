@@ -213,7 +213,7 @@ resource "aws_iam_role" "ssm_maintenance_window_service_role" {
 
 resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_service_attach" {
   role       = aws_iam_role.ssm_maintenance_window_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonSSMServiceRolePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole"
 }
 
 resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_s3_logging_attach" {
