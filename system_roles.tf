@@ -256,7 +256,7 @@ resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_pass_role_atta
 }
 
 resource "aws_iam_policy" "ssm_maintenance_window_pass_role_policy" {
-  name   = "ssm-maintenance-window-s3-logging"
+  name   = "ssm-maintenance-window-iam-pass-role"
   policy = <<EOF
 {
     "Version": "2012-10-17",
