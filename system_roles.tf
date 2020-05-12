@@ -190,8 +190,64 @@ resource "aws_iam_role_policy_attachment" "lambda_sns_policy_attach" {
 
 # SSM Service linked role
 
-resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
+/*resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
   aws_service_name = "ssm.amazonaws.com"
+}*/
+
+data "aws_iam_policy_document" "ssm_assume_service_role_policy" {
+  statement {
+    actions = ["sts:AssumeRole"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["ssm.amazonaws.com"]
+    }
+  }
+}
+
+resource "aws_iam_role" "ssm_maintenance_window_service_role" {
+  name = "ssm-maintenance-window-service-role"
+
+  assume_role_policy = data.aws_iam_policy_document.ssm_assume_service_role_policy.json
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
+  role       = aws_iam_role.ssm_maintenance_window_service_role.name
+  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonSSMServiceRolePolicy"
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
+  role       = aws_iam_role.ssm_maintenance_window_service_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_s3_logging.arn
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_s3_logging" {
+  name   = "ssm-maintenance-window-s3-logging"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "s3:GetBucketLocation",
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetEncryptionConfiguration",
+                "s3:AbortMultipartUpload",
+                "s3:ListMultipartUploadParts",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads"
+            ],
+            "Resource": [
+                "arn:aws:s3:::aw-ssm-logs/*",
+                "arn:aws:s3:::aw-ssm-logs"
+            ]
+        }
+    ]
+}
+EOF
 }
 
 ###################
