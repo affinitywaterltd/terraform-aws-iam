@@ -250,6 +250,32 @@ resource "aws_iam_policy" "ssm_maintenance_window_s3_logging" {
 EOF
 }
 
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_pass_role_attach" {
+  role       = aws_iam_role.ssm_maintenance_window_service_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_pass_role_policy.arn
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_pass_role_policy" {
+  name   = "ssm-maintenance-window-s3-logging"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+EOF
+}
+
 ###################
 #Sophos-Central-AWS
 ###################
