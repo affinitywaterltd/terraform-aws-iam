@@ -834,3 +834,106 @@ resource "aws_iam_role_policy_attachment" "elasticbeanstalk_service_role_attach"
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSElasticBeanstalkService"
 }
 
+#
+# AWS Instance Scheduler Role
+#
+
+resource "aws_iam_role" "aws_instace_scheduler_role" {
+  name = "AWS-Instance-Scheduler-Role"
+  lifecycle {
+    ignore_changes = [assume_role_policy]
+  }
+  assume_role_policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Effect": "Allow",
+      "Principal": {
+        "Service": "lambda.amazonaws.com",
+        "AWS": "arn:aws:iam::98661835190:root"
+      },
+      "Action": "sts:AssumeRole"
+    }
+  ]
+}
+EOF
+
+}
+
+resource "aws_iam_policy" "aws_instace_scheduler_policy" {
+  name   = "AWS-Instance-Scheduler-Policy"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "rds:DeleteDBSnapshot",
+                "rds:DescribeDBSnapshots",
+                "rds:StopDBInstance"
+            ],
+            "Resource": "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:snapshot:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "rds:AddTagsToResource",
+                "rds:RemoveTagsFromResource",
+                "rds:DescribeDBSnapshots",
+                "rds:StartDBInstance",
+                "rds:StopDBInstance"
+            ],
+            "Resource": "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:db:*",
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "rds:AddTagsToResource",
+                "rds:RemoveTagsFromResource",
+                "rds:StartDBCluster",
+                "rds:StopDBCluster"
+            ],
+            "Resource": [
+                "arn:aws:rds:*:${data.aws_caller_identity.current.account_id}:cluster:*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "ec2:StartInstances",
+                "ec2:StopInstances",
+                "ec2:CreateTags",
+                "ec2:DeleteTags"
+            ],
+            "Resource": [
+                "arn:aws:ec2:*:${data.aws_caller_identity.current.account_id}:instance/*"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "rds:DescribeDBClusters",
+                "rds:DescribeDBInstances",
+                "ec2:DescribeInstances",
+                "ec2:DescribeRegions",
+                "ec2:ModifyInstanceAttribute",
+                "ssm:DescribeMaintenanceWindows",
+                "ssm:DescribeMaintenanceWindowExecutions",
+                "tag:GetResources"
+            ],
+            "Resource": [
+                "*"
+            ],
+            "Effect": "Allow"
+        }
+    ]
+}
+EOF
+
+}
+
+resource "aws_iam_role_policy_attachment" "aws_instace_scheduler_policy_attach" {
+  role       = aws_iam_role.aws_instace_scheduler_role.name
+  policy_arn = aws_iam_policy.aws_instace_scheduler_policy.arn
+}
