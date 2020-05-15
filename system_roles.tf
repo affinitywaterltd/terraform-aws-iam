@@ -851,7 +851,7 @@ resource "aws_iam_role" "aws_instace_scheduler_role" {
       "Effect": "Allow",
       "Principal": {
         "Service": "lambda.amazonaws.com",
-        "AWS": "arn:aws:iam::98661835190:root"
+        "AWS": "arn:aws:iam::986618351900:root"
       },
       "Action": "sts:AssumeRole"
     }
