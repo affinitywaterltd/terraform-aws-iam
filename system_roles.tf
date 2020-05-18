@@ -7,7 +7,7 @@
 resource "aws_iam_role" "ec2_ssm_role" {
   name = "SSM_Role"
   description = "Default IAM role applied to EC2 instances for SSM Patching and Server build access to resources"
-  
+
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -106,7 +106,7 @@ resource "aws_iam_policy" "ssm_s3_bucket" {
             ]
         },
         {
-            "Sid": "VisualEditor0",
+            "Sid": "VisualEditor1",
             "Effect": "Allow",
             "Action": [
                 "s3:GetObject",
