@@ -30,7 +30,7 @@ output "lambda_cloudwatch_logs_expiration_role" {
 
 output "ssm_service_role" {
   description = "SSM Service Linked Role"
-  value       = aws_iam_role.iam_service_linked_role_for_ssm.arn
+  value       = aws_iam_service_linked_role.iam_service_linked_role_for_ssm.arn
 }
 
 output "sophos_central_aws" {
