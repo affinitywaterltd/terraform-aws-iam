@@ -595,7 +595,7 @@ resource "aws_iam_role" "app_grafana_cloudwatch_read_role" {
             "Sid": "",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::986618351900:role/SSM_Role"
+                "AWS": "arn:aws:iam::986618351900:role/ssm_role_custom_grafana"
             },
             "Action": "sts:AssumeRole"
         },
