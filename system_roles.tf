@@ -195,12 +195,6 @@ resource "aws_iam_service_linked_role" "iam_service_linked_role_for_ssm" {
 }
 
 
-resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_service_attach" {
-  role       = aws_iam_role.iam_service_linked_role_for_ssm.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMServiceRolePolicy"
-}
-
-
 ###################
 #Sophos-Central-AWS
 ###################
