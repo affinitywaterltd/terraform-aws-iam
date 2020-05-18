@@ -6,7 +6,8 @@
 
 resource "aws_iam_role" "ec2_ssm_role" {
   name = "SSM_Role"
-
+  description = "Default IAM role applied to EC2 instances for SSM Patching and Server build access to resources"
+  
   assume_role_policy = <<EOF
 {
   "Version": "2012-10-17",
@@ -22,24 +23,17 @@ resource "aws_iam_role" "ec2_ssm_role" {
     }
   ]
 }
- 
 EOF
-
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_ssm_role_policy_attach" {
   role       = aws_iam_role.ec2_ssm_role.name
-  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEC2RoleforSSM"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_read_role_policy_attach" {
   role       = aws_iam_role.ec2_ssm_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "sns_full_role_policy_attach" {
-  role       = aws_iam_role.ec2_ssm_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonSNSFullAccess"
 }
 
 resource "aws_iam_instance_profile" "ec2_ssm_role" {
@@ -48,7 +42,7 @@ resource "aws_iam_instance_profile" "ec2_ssm_role" {
 }
 
 resource "aws_iam_policy" "ec2_tags_create" {
-  name   = "EC2TagsCreate"
+  name   = "ssm_ec2_create_tags"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -62,7 +56,6 @@ resource "aws_iam_policy" "ec2_tags_create" {
     ]
 }
 EOF
-
 }
 
 resource "aws_iam_role_policy_attachment" "ec2_tags_create_role_policy_attach" {
@@ -85,16 +78,10 @@ resource "aws_iam_policy" "iam_assume_role" {
     ]
 }
 EOF
-
 }
 
-resource "aws_iam_role_policy_attachment" "iam_assume_role_policy_attach" {
-  role       = aws_iam_role.ec2_ssm_role.name
-  policy_arn = aws_iam_policy.iam_assume_role.arn
-}
-
-resource "aws_iam_policy" "ec2_snapshot" {
-  name   = "EC2Snapshot"
+resource "aws_iam_policy" "ssm_s3_bucket" {
+  name   = "ssm_s3_bucket"
   policy = <<EOF
 {
     "Version": "2012-10-17",
@@ -103,45 +90,41 @@ resource "aws_iam_policy" "ec2_snapshot" {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
             "Action": [
-                "ec2:DeleteSnapshot",
-                "ec2:ModifySnapshotAttribute",
-                "ec2:CreateSnapshot",
-                "ssm:GetParameter"
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:GetEncryptionConfiguration",
+                "s3:ListBucketMultipartUploads",
+                "s3:AbortMultipartUpload",
+                "s3:ListBucket",
+                "s3:GetBucketLocation",
+                "s3:PutObjectAcl",
+                "s3:ListMultipartUploadParts"
             ],
-            "Resource": "*"
-        }
-    ]
-}
-EOF
-
-}
-
-resource "aws_iam_policy" "s3_bucket_ssm_scripts" {
-  name   = "S3SSMScripts"
-  policy = <<EOF
-{
-    "Version": "2012-10-17",
-    "Statement": [
+            "Resource": [
+                "arn:aws:s3:::aw-ssm-logs",
+                "arn:aws:s3:::aw-ssm-logs/*"
+            ]
+        },
         {
             "Sid": "VisualEditor0",
             "Effect": "Allow",
-            "Action": "s3:Get*",
-            "Resource": "arn:aws:s3:::aw-ssm-logs"
+            "Action": [
+                "s3:GetObject",
+                "s3:ListBucket"
+            ],
+            "Resource": [
+                "arn:aws:s3:::aw-tooling",
+                "arn:aws:s3:::aw-tooling/*"
+            ]
         }
     ]
 }
 EOF
-
 }
 
-resource "aws_iam_role_policy_attachment" "s3_bucket_ssm_scripts_role_policy_attach" {
+resource "aws_iam_role_policy_attachment" "ssm_s3_bucket_role_policy_attach" {
   role       = aws_iam_role.ec2_ssm_role.name
-  policy_arn = aws_iam_policy.s3_bucket_ssm_scripts.arn
-}
-
-resource "aws_iam_role_policy_attachment" "ec2_snapshot_role_policy_attach" {
-  role       = aws_iam_role.ec2_ssm_role.name
-  policy_arn = aws_iam_policy.ec2_snapshot.arn
+  policy_arn = aws_iam_policy.ssm_s3_bucket.arn
 }
 
 ###############
