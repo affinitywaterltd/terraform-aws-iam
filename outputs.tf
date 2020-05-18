@@ -63,3 +63,7 @@ output "elasticbeanstalk_service_role" {
   value       = aws_iam_role.elasticbeanstalk_service_role.arn
 }
 
+output "aws_instace_scheduler_role" {
+  description = "AWS Instance Scheduler Role"
+  value       = aws_iam_role.aws_instace_scheduler_role.arn
+}
