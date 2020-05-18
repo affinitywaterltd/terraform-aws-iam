@@ -87,7 +87,7 @@ resource "aws_iam_policy" "ssm_s3_bucket" {
     "Version": "2012-10-17",
     "Statement": [
         {
-            "Sid": "VisualEditor0",
+            "Sid": "AllowSSMS3LogsReadWriteAccess",
             "Effect": "Allow",
             "Action": [
                 "s3:PutObject",
@@ -106,7 +106,7 @@ resource "aws_iam_policy" "ssm_s3_bucket" {
             ]
         },
         {
-            "Sid": "VisualEditor1",
+            "Sid": "AllowSSMToolingReadAccess",
             "Effect": "Allow",
             "Action": [
                 "s3:GetObject",
