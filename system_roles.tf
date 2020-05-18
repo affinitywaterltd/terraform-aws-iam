@@ -211,12 +211,12 @@ resource "aws_iam_role" "ssm_maintenance_window_service_role" {
   assume_role_policy = data.aws_iam_policy_document.ssm_assume_service_role_policy.json
 }
 
-resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_service_attach" {
   role       = aws_iam_role.ssm_maintenance_window_service_role.name
-  policy_arn = "arn:aws:iam::aws:policy/aws-service-role/AmazonSSMServiceRolePolicy"
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonSSMMaintenanceWindowRole"
 }
 
-resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_start_instance_attach" {
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_s3_logging_attach" {
   role       = aws_iam_role.ssm_maintenance_window_service_role.name
   policy_arn = aws_iam_policy.ssm_maintenance_window_s3_logging.arn
 }
@@ -243,6 +243,32 @@ resource "aws_iam_policy" "ssm_maintenance_window_s3_logging" {
             "Resource": [
                 "arn:aws:s3:::aw-ssm-logs/*",
                 "arn:aws:s3:::aw-ssm-logs"
+            ]
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_role_policy_attachment" "ssm_maintenance_window_pass_role_attach" {
+  role       = aws_iam_role.ssm_maintenance_window_service_role.name
+  policy_arn = aws_iam_policy.ssm_maintenance_window_pass_role_policy.arn
+}
+
+resource "aws_iam_policy" "ssm_maintenance_window_pass_role_policy" {
+  name   = "ssm-maintenance-window-iam-pass-role"
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "VisualEditor1",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "*"
             ]
         }
     ]
