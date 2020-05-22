@@ -843,3 +843,73 @@ resource "aws_iam_role_policy_attachment" "aws_instace_scheduler_policy_attach" 
   role       = aws_iam_role.aws_instace_scheduler_role.name
   policy_arn = aws_iam_policy.aws_instace_scheduler_policy.arn
 }
+
+
+#
+# S3 Replication Role
+#
+resource "aws_iam_role" "s3_accesslogs_bucket_replication_role" {
+  name = "s3-accesslogs-bucket-replication-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "s3.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_policy" "s3_accesslogs_bucket_replication_policy" {
+  name = "s3-accesslogs-bucket-replication-policy"
+
+  policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetReplicationConfiguration",
+        "s3:ListBucket"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::${var.local_logging_s3_bucket}"
+      ]
+    },
+    {
+      "Action": [
+        "s3:GetObjectVersion",
+        "s3:GetObjectVersionAcl"
+      ],
+      "Effect": "Allow",
+      "Resource": [
+        "arn:aws:s3:::${var.local_logging_s3_bucket}/*"
+      ]
+    },
+    {
+      "Action": [
+        "s3:ReplicateObject",
+        "s3:ReplicateDelete"
+      ],
+      "Effect": "Allow",
+      "Resource": "arn:aws:s3:::${var.centralised_logging_s3_bucket}/*"
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_policy_attachment" "replication" {
+  name       = "s3-bucket-replication"
+  roles      = [aws_iam_role.s3_accesslogs_bucket_replication_role.name]
+  policy_arn = aws_iam_policy.s3_accesslogs_bucket_replication_policy.arn
+}
