@@ -67,3 +67,8 @@ output "aws_instace_scheduler_role" {
   description = "AWS Instance Scheduler Role"
   value       = aws_iam_role.aws_instace_scheduler_role.arn
 }
+
+output "s3_accesslogs_bucket_replication_role" {
+  description = "S3 Access Log Bucket Replication Role"
+  value       = aws_iam_role.s3_accesslogs_bucket_replication_role.arn
+}
