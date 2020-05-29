@@ -897,11 +897,17 @@ resource "aws_iam_policy" "s3_accesslogs_bucket_replication_policy" {
     },
     {
       "Action": [
+        "s3:GetBucketVersioning",
+        "s3:PutBucketVersioning",
         "s3:ReplicateObject",
-        "s3:ReplicateDelete"
+        "s3:ReplicateDelete",
+        "s3:ObjectOwnerOverrideToBucketOwner"
       ],
       "Effect": "Allow",
-      "Resource": "arn:aws:s3:::${var.centralised_logging_s3_bucket}/*"
+      "Resource": [
+          "arn:aws:s3:::${var.centralised_logging_s3_bucket}/*",
+          "arn:aws:s3:::${var.centralised_logging_s3_bucket}"
+      ]
     }
   ]
 }
