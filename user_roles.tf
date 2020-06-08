@@ -115,6 +115,16 @@ resource "aws_iam_role_policy_attachment" "sysops_elastisearch_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_fsx_policy_attach" {
+  role       = aws_iam_role.sysops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonFSxFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_elastisearch_policy_attach" {
+  role       = aws_iam_role.sysops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSDataSyncFullAccess"
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
