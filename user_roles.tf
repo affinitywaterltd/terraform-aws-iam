@@ -513,3 +513,142 @@ POLICY
 
 }
 
+#
+# Data Engineer Role
+#
+
+# Admin Role
+
+resource "aws_iam_role" "data_engineer_role" {
+  name                 = "AWLDataEngineerRole"
+  assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
+  max_session_duration = 43200
+}
+
+resource "aws_iam_role_policy_attachment" "lakeformation_role_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLakeFormationDataAdmin"
+}
+
+# Resource modifcation from original AmazonPolicy arn:aws:iam::aws:policy/AmazonRedshiftFullAccess
+resource "aws_iam_policy" "redshift_limited_iam_policy" {
+  name        = "redshift_limited_iam_policy"
+  description = "Permit access to limited Redshift Clusters"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "ec2:DescribeAccountAttributes",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeAvailabilityZones",
+                "ec2:DescribeSecurityGroups",
+                "ec2:DescribeSubnets",
+                "ec2:DescribeVpcs",
+                "ec2:DescribeInternetGateways",
+                "sns:CreateTopic",
+                "sns:Get*",
+                "sns:List*",
+                "cloudwatch:Describe*",
+                "cloudwatch:Get*",
+                "cloudwatch:List*",
+                "cloudwatch:PutMetricAlarm",
+                "cloudwatch:EnableAlarmActions",
+                "cloudwatch:DisableAlarmActions",
+                "cloudwatch:ListMetrics",
+                "cloudwatch:GetMetricWidgetImage",
+                "cloudwatch:GetMetricData",
+                "tag:GetResources",
+                "tag:UntagResources",
+                "tag:GetTagValues",
+                "tag:GetTagKeys",
+                "tag:TagResources",
+                "redshift:describe*"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Action": [
+                "redshift:*"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:redshift:eu-west-1:739672810541:cluster:ardmrdw1-instance",
+                "arn:aws:redshift:eu-west-1:739672810541:cluster:arpawdw1-instance",
+                "arn:aws:redshift:eu-west-1:739672810541:cluster:aruawdw1-instance"
+            ]
+        },
+        {
+            "Action": [
+                "iam:PutRolePolicy"
+            ],
+            "Effect": "Allow",
+            "Resource": [
+                "arn:aws:iam::739672810541:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormationDataAccess"
+            ]
+        },
+        {
+            "Action": [
+                "redshift:DescribeClusters"
+            ],
+            "Effect": "Allow",
+            "Resource": "*"
+        },
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "arn:aws:iam::*:role/aws-service-role/redshift.amazonaws.com/AWSServiceRoleForRedshift",
+            "Condition": {
+                "StringLike": {
+                    "iam:AWSServiceName": "redshift.amazonaws.com"
+                }
+            }
+        }
+    ]
+}
+POLICY
+
+}
+
+resource "aws_iam_role_policy_attachment" "redshift_limited_iam_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = aws_iam_policy.redshift_limited_iam_policy.arn
+}
+
+
+# Resource modifcation from original AmazonPolicy arn:aws:iam::aws:policy/AmazonRedshiftFullAccess
+resource "aws_iam_policy" "s3_datalake_iam_policy" {
+  name        = "s3_datalake_iam_policy"
+  description = "Permit access to awl-datalake s3 bucket"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Action": [
+                "s3:ListBucket"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::aw-datalake"
+        }, 
+        {
+            "Action": [
+                "s3:GetObject",
+                "s3:GetObjectAcl"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::aw-datalake/*"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "s3_datalake_iam_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = aws_iam_policy.s3_datalake_iam_policy.arn
+}
