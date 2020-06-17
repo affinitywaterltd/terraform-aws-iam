@@ -629,9 +629,16 @@ resource "aws_iam_policy" "s3_datalake_iam_policy" {
 {
     "Version": "2012-10-17",
     "Statement": [
-        {
+         {
             "Action": [
-                "s3:ListAllBuckets",
+                "s3:ListAllMyBuckets",
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:s3:::*"
+        },{
+            "Action": [
                 "s3:ListBucket",
                 "s3:GetBucketLocation"
             ],
