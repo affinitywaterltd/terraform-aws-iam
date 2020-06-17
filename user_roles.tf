@@ -525,10 +525,11 @@ resource "aws_iam_role" "data_engineer_role" {
   max_session_duration = 43200
 }
 
+/*
 resource "aws_iam_role_policy_attachment" "lakeformation_role_policy_attach" {
   role       = aws_iam_role.data_engineer_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLakeFormationDataAdmin"
-}
+}*/
 
 # Resource modifcation from original AmazonPolicy arn:aws:iam::aws:policy/AmazonRedshiftFullAccess
 resource "aws_iam_policy" "redshift_limited_iam_policy" {
@@ -630,7 +631,8 @@ resource "aws_iam_policy" "s3_datalake_iam_policy" {
     "Statement": [
         {
             "Action": [
-                "s3:ListBucket"
+                "s3:ListBucket",
+                "s3:GetBucketLocation"
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::aw-datalake"
