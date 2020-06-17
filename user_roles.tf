@@ -631,7 +631,7 @@ resource "aws_iam_policy" "s3_datalake_iam_policy" {
     "Statement": [
          {
             "Action": [
-                "s3:ListAllMyBuckets",
+                "s3:ListAllMyBuckets"
             ],
             "Effect": "Allow",
             "Resource": "*"
