@@ -92,3 +92,35 @@ EOF
 
 }
 
+#SolarWinds User
+resource "aws_iam_user" "solarwinds_monitor_user" {
+  name          = "SolarWinds_Monitor"
+  force_destroy = true
+}
+
+resource "aws_iam_user_policy" "solarwinds_monitor_user" {
+  user = aws_iam_user.solarwinds_monitor_user.name
+  name = "SolarWinds_Monitor"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeVolumeStatus",
+                "cloudwatch:GetMetricStatistics",
+                "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+
+}
+
