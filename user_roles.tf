@@ -276,6 +276,11 @@ resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dev_apigateway_role_policy_attach" {
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
+}
+
 /*
 resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
   role       = "${aws_iam_role.dev_ops_role.name}"
