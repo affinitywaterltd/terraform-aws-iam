@@ -675,7 +675,7 @@ resource "aws_iam_role_policy_attachment" "s3_datalake_iam_policy_attach" {
 # DataScientist Role
 
 resource "aws_iam_role" "datascientist_role" {
-  name                 = "AWLDataScienistRole"
+  name                 = "AWLDataScientistRole"
   assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
   max_session_duration = 43200
 }
