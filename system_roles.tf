@@ -934,7 +934,7 @@ resource "aws_iam_role" "app_cicd_codecommit_access_role" {
             "Sid": "",
             "Effect": "Allow",
             "Principal": {
-                "AWS": "arn:aws:iam::633033879498:role/ssm_role_custom_cicds"
+                "AWS": "arn:aws:iam::633033879498:role/ssm_role_custom_cicd"
             },
             "Action": "sts:AssumeRole"
         },
