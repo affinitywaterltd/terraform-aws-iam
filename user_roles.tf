@@ -317,6 +317,16 @@ resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dev_ecs_role_policy_attach" {
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_ecr_role_policy_attach" {
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
+}
+
 resource "aws_iam_role_policy_attachment" "dev_kinesis_role_policy_attach" {
   role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
