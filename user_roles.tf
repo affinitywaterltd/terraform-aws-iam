@@ -533,6 +533,38 @@ POLICY
 
 }
 
+
+resource "aws_iam_policy" "dev_ec2_policy" {
+  name        = "dev_ec2_policy"
+  description = "Allows Devs to perform some EC2 functions"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:StartInstances",
+                "ec2:StopInstances",
+                "ec2:RebootInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+} 
+POLICY
+
+}
+
+resource "aws_iam_role_policy_attachment" "dev_iam_ec2_attach" {
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = aws_iam_policy.dev_ec2_policy.arn
+}
+
+
+
+
 #
 # Data Engineer Role
 #
