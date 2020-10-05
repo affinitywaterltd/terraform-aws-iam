@@ -727,8 +727,12 @@ resource "aws_iam_role_policy_attachment" "scientist_sagemaker_role_policy_attac
   policy_arn = "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
 }
 
-
 resource "aws_iam_role_policy_attachment" "scientist_codecommit_role_policy_attach" {
   role       = aws_iam_role.datascientist_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"
+}
+
+resource "aws_iam_role_policy_attachment" "scientist_s3_role_policy_attach" {
+  role       = aws_iam_role.datascientist_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
