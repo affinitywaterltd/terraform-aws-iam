@@ -695,7 +695,8 @@ resource "aws_iam_policy" "s3_datalake_iam_policy" {
         },{
             "Action": [
                 "s3:ListBucket",
-                "s3:GetBucketLocation"
+                "s3:GetBucketLocation",
+                "s3:ListBucketVersions"
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::aw-datalake"
@@ -703,7 +704,8 @@ resource "aws_iam_policy" "s3_datalake_iam_policy" {
         {
             "Action": [
                 "s3:GetObject",
-                "s3:GetObjectAcl"
+                "s3:GetObjectAcl",
+                "s3:GetObjectVersion"
             ],
             "Effect": "Allow",
             "Resource": "arn:aws:s3:::aw-datalake/*"
