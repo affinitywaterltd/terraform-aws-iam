@@ -582,14 +582,93 @@ resource "aws_iam_role" "data_engineer_role" {
   max_session_duration = 43200
 }
 
+# Lake Formation permissions from https://docs.aws.amazon.com/lake-formation/latest/dg/permissions-reference.html#persona-dl-admin
+resource "aws_iam_role_policy_attachment" "lakeformation_role_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLakeFormationDataAdmin"
+}
+
 resource "aws_iam_role_policy_attachment" "glue_role_policy_attach" {
   role       = aws_iam_role.data_engineer_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "lakeformation_role_policy_attach" {
+resource "aws_iam_role_policy_attachment" "cloudwatchlogs_role_policy_attach" {
   role       = aws_iam_role.data_engineer_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSLakeFormationDataAdmin"
+  policy_arn = "arn:aws:iam::aws:policy/CloudWatchLogsReadOnlyAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "lakeformation_crossaccount_role_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSLakeFormationCrossAccountManager"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_role_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
+resource "aws_iam_policy" "lakeformation_service_role_iam_policy" {
+  name        = "lakeformation_service_role_iam_policy"
+  description = "Permit access to LakeFormation Service Role"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "iam:CreateServiceLinkedRole",
+            "Resource": "*",
+            "Condition": {
+                "StringEquals": {
+                    "iam:AWSServiceName": "lakeformation.amazonaws.com"
+                }
+            }
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:PutRolePolicy"
+            ],
+            "Resource": "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/aws-service-role/lakeformation.amazonaws.com/AWSServiceRoleForLakeFormationDataAccess"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "lakeformation_service_role_iam_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = aws_iam_policy.lakeformation_service_role_iam_policy.arn
+}
+
+resource "aws_iam_policy" "iam_passrole_role_iam_policy" {
+  name        = "iam_passrole_role_iam_policy"
+  description = "Permit access to PassRole for IAM Role"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "PassRolePermissions",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/*"
+            ]
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "iam_passrole_role_iam_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = aws_iam_policy.iam_passrole_role_iam_policy.arn
 }
 
 # Resource modifcation from original AmazonPolicy arn:aws:iam::aws:policy/AmazonRedshiftFullAccess
@@ -672,7 +751,6 @@ resource "aws_iam_policy" "redshift_limited_iam_policy" {
     ]
 }
 POLICY
-
 }
 
 resource "aws_iam_role_policy_attachment" "redshift_limited_iam_policy_attach" {
