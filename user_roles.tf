@@ -582,6 +582,10 @@ resource "aws_iam_role" "data_engineer_role" {
   max_session_duration = 43200
 }
 
+resource "aws_iam_role_policy_attachment" "glue_role_policy_attach" {
+  role       = aws_iam_role.data_engineer_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSGlueConsoleFullAccess"
+}
 
 resource "aws_iam_role_policy_attachment" "lakeformation_role_policy_attach" {
   role       = aws_iam_role.data_engineer_role.name
