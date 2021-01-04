@@ -378,8 +378,14 @@ resource "aws_iam_policy" "ec2_cleanup_snapshot" {
             "Effect": "Allow",
             "Action": [
                 "ec2:DeleteSnapshot",
+                "ec2:DeregisterImage",
                 "ec2:ModifySnapshotAttribute",
-                "ec2:Describe*"
+                "ec2:DescribeImages",
+                "logs:DescribeLogGroups",
+                "logs:PutRetentionPolicy",
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents"
             ],
             "Resource": "*"
         }
