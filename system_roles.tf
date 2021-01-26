@@ -965,3 +965,60 @@ resource "aws_iam_role_policy_attachment" "app_cicd_codecommit_policy_attachment
   role       = aws_iam_role.app_cicd_codecommit_access_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"
 }
+
+
+#-------------------------------
+#             SNS
+#-------------------------------
+resource "aws_iam_role" "sns_delivery_logging" {
+  name = "awl-sns-delivery-logging"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "sns.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+
+}
+
+resource "aws_iam_policy" "sns_delivery_logging_policy" {
+  name = "sns-delivery-logging-policy"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:CreateLogStream",
+                "logs:PutLogEvents",
+                "logs:PutMetricFilter",
+                "logs:PutRetentionPolicy"
+            ],
+            "Resource": [
+                "*"
+            ]
+        }
+    ]
+}
+POLICY
+}
+
+
+resource "aws_iam_policy_attachment" "sns_delivery_logging_policy_attachment" {
+  name       = "sns-delivery-logging-policy-attachment"
+  roles      = [aws_iam_role.sns_delivery_logging.name]
+  policy_arn = aws_iam_policy.sns_delivery_logging_policy.arn
+}

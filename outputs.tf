@@ -72,3 +72,8 @@ output "s3_accesslogs_bucket_replication_role" {
   description = "S3 Access Log Bucket Replication Role"
   value       = aws_iam_role.s3_accesslogs_bucket_replication_role.arn
 }
+
+output "sns_delivery_logging_role" {
+  description = "SNS Delivery Logging Role"
+  value       = aws_iam_role.sns_delivery_logging.arn
+}
