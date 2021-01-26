@@ -125,7 +125,7 @@ EOF
 
 
 resource "aws_iam_user" "codecommit_jira_user" {
-  name          = "codecommit_jira_user"
+  name          = "code_commit_jira_user"
   force_destroy = true
 }
 
