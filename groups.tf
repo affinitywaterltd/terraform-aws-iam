@@ -18,6 +18,16 @@ resource "aws_iam_group_policy_attachment" "codecommit_poweruser_iam_group_attac
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"
 }
 
+# Code Commit Power User
+resource "aws_iam_group" "codecommit_data_poweruser_iam_group" {
+  name = "codecommit_data_poweruser"
+}
+
+resource "aws_iam_group_policy_attachment" "codecommit__datapoweruser_iam_group_attachment" {
+  group      = aws_iam_group.codecommit_data_poweruser_iam_group.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitPowerUser"
+}
+
 # Code Commit Restrcted Pull Requests
 resource "aws_iam_group" "codecommit_enforcefullrequests_iam_group" {
   name = "codecommit_enforcefullrequests"
