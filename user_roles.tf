@@ -163,6 +163,11 @@ resource "aws_iam_role_policy_attachment" "dba_support_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dba_athena_policy_attach" {
+  role       = aws_iam_role.dba_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
 resource "aws_iam_policy" "dba_dbmigration_policy" {
   name        = "DB_Migration_Service"
   description = "Allows DBAs to use Database Migration Service"
