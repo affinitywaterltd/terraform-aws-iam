@@ -1047,7 +1047,7 @@ POLICY
 
 }
 
-resource "aws_iam_role_policy_attachment" "app_cicd_codecommit_policy_attachment" {
+resource "aws_iam_role_policy_attachment" "aws_shield_drt_policy_attachment" {
   role       = aws_iam_role.aws_shield_drt_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy"
 }
