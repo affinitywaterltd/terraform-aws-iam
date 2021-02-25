@@ -77,3 +77,8 @@ output "sns_delivery_logging_role" {
   description = "SNS Delivery Logging Role"
   value       = aws_iam_role.sns_delivery_logging.arn
 }
+
+output "aws_waf_kinesis_role" {
+  description = "AWS WAF Kinesis Firehose Role"
+  value       = aws_iam_role.aws_waf_kinesis_role.arn
+}

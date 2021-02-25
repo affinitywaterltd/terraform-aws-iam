@@ -1051,3 +1051,78 @@ resource "aws_iam_role_policy_attachment" "aws_shield_drt_policy_attachment" {
   role       = aws_iam_role.aws_shield_drt_role.name
   policy_arn = "arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy"
 }
+
+#-------------------------------
+#   AWS WAF Kinesis
+#-------------------------------
+resource "aws_iam_role" "aws_waf_kinesis_role" {
+  name = "aws-waf-kinesis-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "firehose.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+}
+
+resource "aws_iam_policy" "aws_waf_kinesis_policy" {
+  name = "aws-waf-kinesis-policy"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",  
+    "Statement":
+    [    
+        {      
+            "Effect": "Allow",      
+            "Action": [
+                "s3:AbortMultipartUpload",
+                "s3:GetBucketLocation",
+                "s3:GetObject",
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads",
+                "s3:PutObject"
+            ],      
+            "Resource": [        
+                "arn:aws:s3:::${var.local_logging_s3_bucket}",
+                "arn:aws:s3:::${var.local_logging_s3_bucket}/*"		    
+            ]    
+        },        
+        {
+            "Effect": "Allow",
+            "Action": [
+                "kinesis:DescribeStream",
+                "kinesis:GetShardIterator",
+                "kinesis:GetRecords",
+                "kinesis:ListShards"
+            ],
+            "Resource": "*"
+        }
+        {
+           "Effect": "Allow",
+           "Action": [
+               "logs:PutLogEvents"
+           ],
+           "Resource": [
+               "*"
+           ]
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "aws_waf_kinesis_policy_attachment" {
+  role       = aws_iam_role.aws_waf_kinesis_role.name
+  policy_arn = aws_iam_policy.aws_waf_kinesis_policy.arn
+}
