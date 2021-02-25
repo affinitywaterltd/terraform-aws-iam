@@ -1022,3 +1022,32 @@ resource "aws_iam_policy_attachment" "sns_delivery_logging_policy_attachment" {
   roles      = [aws_iam_role.sns_delivery_logging.name]
   policy_arn = aws_iam_policy.sns_delivery_logging_policy.arn
 }
+
+#-------------------------------
+#   AWS DRT - Shield Advanced
+#-------------------------------
+resource "aws_iam_role" "aws_shield_drt_role" {
+  name = "aws-shield-drt-role"
+
+  assume_role_policy = <<POLICY
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": "sts:AssumeRole",
+      "Principal": {
+        "Service": "drt.shield.amazonaws.com"
+      },
+      "Effect": "Allow",
+      "Sid": ""
+    }
+  ]
+}
+POLICY
+
+}
+
+resource "aws_iam_role_policy_attachment" "app_cicd_codecommit_policy_attachment" {
+  role       = aws_iam_role.aws_shield_drt_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSShieldDRTAccessPolicy"
+}
