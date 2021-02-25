@@ -1107,7 +1107,7 @@ resource "aws_iam_policy" "aws_waf_kinesis_policy" {
                 "kinesis:ListShards"
             ],
             "Resource": "*"
-        }
+        },
         {
            "Effect": "Allow",
            "Action": [
