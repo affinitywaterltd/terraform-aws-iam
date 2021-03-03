@@ -25,7 +25,7 @@ resource "aws_iam_group" "codeartifact_adminaccess_iam_group" {
 
 resource "aws_iam_group_policy_attachment" "codeartifact_adminaccess_iam_group_attachment" {
   group      = aws_iam_group.codeartifact_adminaccess_iam_group.name
-  policy_arn = "arn:aws:iam::aws:policy/arn:aws:iam::aws:policy/AWSCodeArtifactAdminAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeArtifactAdminAccess"
 }
 
 # Code Commit Data Power User
