@@ -337,6 +337,12 @@ resource "aws_iam_role_policy_attachment" "dev_kinesis_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dev_codeartifact_role_policy_attach" {
+  role       = aws_iam_role.dev_ops_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeArtifactAdminAccess"
+}
+
+
 resource "aws_iam_role_policy_attachment" "dev_support_policy_attach" {
   role       = aws_iam_role.dev_ops_role.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
