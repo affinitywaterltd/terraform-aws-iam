@@ -89,7 +89,23 @@ resource "aws_iam_user_policy" "ses_smtp_user" {
     ]
 }
 EOF
+}
 
+resource "aws_iam_policy" "ses_smtp_user" {
+  name = "ses_sending_access"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ses:SendRawEmail",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 #SolarWinds User
