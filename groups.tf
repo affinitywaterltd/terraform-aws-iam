@@ -190,7 +190,7 @@ resource "aws_iam_group" "app_citrix_machine_creation_iam_group" {
   name = "app_citrix_machine_creation"
 }
 
-resource "aws_iam_user_policy" "citrix_machine_creation" {
+resource "aws_iam_policy" "citrix_machine_creation" {
   name = "app_citrix_machine_creation"
 
   policy = <<EOF
