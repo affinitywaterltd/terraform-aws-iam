@@ -170,6 +170,11 @@ resource "aws_iam_policy" "solarwinds_monitor_user" {
 EOF
 }
 
+resource "aws_iam_group_policy_attachment" "app_solarwinds_iam_group_attachment" {
+  group      = aws_iam_group.app_solarwinds_iam_group.name
+  policy_arn = aws_iam_policy.solarwinds_monitor_user.arn
+}
+
 resource "aws_iam_group_membership" "app_solarwinds_iam_group_membership" {
   name = "app_solarwinds_iam_group_membership"
 
