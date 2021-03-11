@@ -108,9 +108,27 @@ resource "aws_iam_group_membership" "codecommit_readonlyuser_iam_group_membershi
   group = aws_iam_group.codecommit_readonlyuser_iam_group.name
 }
 
+
 # SES Send User
 resource "aws_iam_group" "ses_sendingaccess_iam_group" {
   name = "ses_sendingaccess"
+}
+
+resource "aws_iam_policy" "ses_smtp_user" {
+  name = "ses_sending_access"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "ses:SendRawEmail",
+            "Resource": "*"
+        }
+    ]
+}
+EOF
 }
 
 resource "aws_iam_group_membership" "ses_sendingaccess_iam_group_membership" {
@@ -121,4 +139,43 @@ resource "aws_iam_group_membership" "ses_sendingaccess_iam_group_membership" {
   ]
 
   group = aws_iam_group.ses_sendingaccess_iam_group.name
+}
+
+# Solarwinds User
+resource "aws_iam_group" "app_solarwinds_iam_group" {
+  name = "app_solarwinds"
+}
+
+resource "aws_iam_policy" "solarwinds_monitor_user" {
+  name = "app_solarwinds_policy"
+
+  policy = <<EOF
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "ec2:DescribeInstances",
+                "ec2:DescribeAddresses",
+                "ec2:DescribeVolumes",
+                "ec2:DescribeVolumeStatus",
+                "cloudwatch:GetMetricStatistics",
+                "autoscaling:DescribeAutoScalingInstances"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+EOF
+}
+
+resource "aws_iam_group_membership" "app_solarwinds_iam_group_membership" {
+  name = "app_solarwinds_iam_group_membership"
+
+  users = [
+    aws_iam_user.solarwinds_monitor_user.name
+  ]
+
+  group = aws_iam_group.app_solarwinds_iam_group.name
 }
