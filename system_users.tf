@@ -144,8 +144,3 @@ resource "aws_iam_user" "codecommit_jira_user" {
   name          = "code_commit_jira_user"
   force_destroy = true
 }
-
-resource "aws_iam_user_policy_attachment" "codecommit_jira_user_policy_attachmeent" {
-  user       = aws_iam_user.codecommit_jira_user.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitReadOnly"
-}

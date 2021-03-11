@@ -93,6 +93,11 @@ resource "aws_iam_group" "codecommit_readonlyuser_iam_group" {
   name = "codecommit_readonlyuser"
 }
 
+resource "aws_iam_group_policy_attachment" "codecommit_readonlyuser_iam_group_attachment" {
+  group      = aws_iam_group.codecommit_readonlyuser_iam_group.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitReadOnly"
+}
+
 resource "aws_iam_group_membership" "codecommit_readonlyuser_iam_group_membership" {
   name = "codecommit_readonlyuser_iam_group_membership"
 
