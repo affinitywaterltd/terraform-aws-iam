@@ -184,3 +184,83 @@ resource "aws_iam_group_membership" "app_solarwinds_iam_group_membership" {
 
   group = aws_iam_group.app_solarwinds_iam_group.name
 }
+
+# CitrixMachineCreation User
+resource "aws_iam_group" "app_citrix_machine_creation_iam_group" {
+  name = "app_citrix_machine_creation"
+}
+
+resource "aws_iam_user_policy" "citrix_machine_creation" {
+  name = "app_citrix_machine_creation"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+ {
+      "Action": [
+        "ec2:AttachVolume",
+        "ec2:AuthorizeSecurityGroupEgress",
+        "ec2:AuthorizeSecurityGroupIngress",
+        "ec2:CreateImage",
+        "ec2:CreateNetworkInterface",
+        "ec2:CreateSecurityGroup",
+        "ec2:CreateTags",
+        "ec2:CreateVolume",
+        "ec2:DeleteNetworkInterface",
+        "ec2:DeleteSecurityGroup",
+        "ec2:DeleteSnapshot",
+        "ec2:DeleteVolume",
+        "ec2:DeregisterImage",
+        "ec2:DescribeAccountAttributes",
+        "ec2:DescribeAvailabilityZones",
+        "ec2:DescribeImages",
+        "ec2:DescribeInstances",
+        "ec2:DescribeNetworkInterfaces",
+        "ec2:DescribeRegions",
+        "ec2:DescribeSecurityGroups",
+        "ec2:DescribeSubnets",
+        "ec2:DescribeVolumes",
+        "ec2:DescribeVpcs",
+        "ec2:DetachVolume",
+        "ec2:RebootInstances",
+        "ec2:RevokeSecurityGroupEgress",
+        "ec2:RevokeSecurityGroupIngress",
+        "ec2:RunInstances",
+        "ec2:StartInstances",
+        "ec2:StopInstances",
+        "ec2:TerminateInstances"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    },
+    {
+      "Action": [
+        "s3:CreateBucket",
+        "s3:DeleteBucket",
+        "s3:DeleteObject",
+        "s3:GetObject",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_group_policy_attachment" "app_citrix_machine_creation_iam_group_attachment" {
+  group      = aws_iam_group.app_citrix_machine_creation_iam_group.name
+  policy_arn = aws_iam_policy.app_citrix_machine_creation.arn
+}
+
+resource "aws_iam_group_membership" "app_citrix_machine_creation_iam_group_membership" {
+  name = "app_citrix_machine_creation_iam_group_membership"
+
+  users = [
+    aws_iam_user.citrix_machine_creation.name
+  ]
+
+  group = aws_iam_group.app_citrix_machine_creation_iam_group.name
+}
