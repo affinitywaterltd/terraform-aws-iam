@@ -131,6 +131,11 @@ resource "aws_iam_policy" "ses_smtp_user" {
 EOF
 }
 
+resource "aws_iam_group_policy_attachment" "ses_sendingaccess_iam_group_attachment" {
+  group      = aws_iam_group.ses_sendingaccess_iam_group.name
+  policy_arn = aws_iam_policy.ses_smtp_user.arn
+}
+
 resource "aws_iam_group_membership" "ses_sendingaccess_iam_group_membership" {
   name = "ses_sendingaccess_iam_group_membership"
 
