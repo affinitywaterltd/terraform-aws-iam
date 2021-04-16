@@ -303,7 +303,7 @@ resource "aws_iam_group_policy_attachment" "ecs_cli_admin_iam_group_attachment" 
 
 # ECS Exec Group
 resource "aws_iam_group" "s3_admin_iam_group" {
-  name = "s3_admin_iam_group"
+  name = "s3_admin"
 }
 
 resource "aws_iam_policy" "s3_admin" {
