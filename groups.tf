@@ -269,3 +269,33 @@ resource "aws_iam_group_membership" "app_citrix_machine_creation_iam_group_membe
 
   group = aws_iam_group.app_citrix_machine_creation_iam_group.name
 }
+
+# ECS_Exec Group
+resource "aws_iam_group" "ecs_cli_admin_iam_group" {
+  name = "ecs_cli_admin"
+}
+
+resource "aws_iam_policy" "ecs_cli_admin" {
+  name = "ecs_cli_admin"
+
+  policy = <<EOF
+{
+  "Version": "2012-10-17",
+  "Statement": [
+ {
+      "Action": [
+        "ecs:DescribeTasks",
+        "ecs:ExecuteCommand"
+      ],
+      "Effect": "Allow",
+      "Resource": "*"
+    }
+  ]
+}
+EOF
+}
+
+resource "aws_iam_group_policy_attachment" "ecs_cli_admin_iam_group_attachment" {
+  group      = aws_iam_group.ecs_cli_admin_iam_group.name
+  policy_arn = aws_iam_policy.ecs_cli_admin.arn
+}
