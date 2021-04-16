@@ -317,7 +317,9 @@ resource "aws_iam_policy" "s3_admin" {
       "Action": [
         "s3:Get*",
         "s3:Put*",
-        "s3:Delete*"
+        "s3:Delete*",
+        "s3:Head*",
+        "s3:List*"
       ],
       "Effect": "Allow",
       "Resource": "*"
