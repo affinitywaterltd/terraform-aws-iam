@@ -591,6 +591,7 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "dev_iam_ec2_attach" {
+  count      = var.enable_awldevopsrole ? 1 : 0
   role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = aws_iam_policy.dev_ec2_policy.0.arn
 }
