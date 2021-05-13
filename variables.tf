@@ -21,3 +21,8 @@ variable "enable_awlsysopsrole" {
   description = "Conditional creation of role"
   default     = true
 }
+
+variable "enable_awldatabaseanalystrole" {
+  description = "Conditional creation of role"
+  default     = true
+}

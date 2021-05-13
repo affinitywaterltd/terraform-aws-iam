@@ -149,42 +149,50 @@ resource "aws_iam_role_policy_attachment" "sysops_marketplace_policy_attach" {
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
+  count                = var.enable_awldatabaseanalystrole ? 1 : 0
   name                 = "AWLDatabaseAnalystRole"
   assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
   max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "dba_read_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_admin_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/job-function/DatabaseAdministrator"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_awsbackup_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupAdminPolicy"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_awswellarchitected_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/WellArchitectedConsoleFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_support_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dba_athena_policy_attach" {
-  role       = aws_iam_role.dba_role.name
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
 }
 
 resource "aws_iam_policy" "dba_dbmigration_policy" {
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
   name        = "DB_Migration_Service"
   description = "Allows DBAs to use Database Migration Service"
 
@@ -262,8 +270,9 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "dba_dms_policy_attach" {
-  role       = aws_iam_role.dba_role.name
-  policy_arn = aws_iam_policy.dba_dbmigration_policy.arn
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
+  policy_arn = aws_iam_policy.dba_dbmigration_policy.0.arn
 }
 
 ### ReadOnlyRole
