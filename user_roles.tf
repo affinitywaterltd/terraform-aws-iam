@@ -266,28 +266,33 @@ resource "aws_iam_role_policy_attachment" "read_only_role_policy_attach" {
 ### DevOpsRole
 
 resource "aws_iam_role" "dev_ops_role" {
+  count                = var.enable_awldevopsrole ? 1 : 0
   name                 = "AWLDevOpsRole"
   assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
   max_session_duration = 43199
 }
 
 resource "aws_iam_role_policy_attachment" "dev_s3_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeCommitFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_apigateway_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
 }
 
@@ -308,47 +313,56 @@ resource "aws_iam_role_policy_attachment" "dev_codepipeline_role_policy_attach" 
 }*/
 
 resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_translate_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/TranslateFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_polly_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonPollyFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_ecs_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonECS_FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_ecr_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_kinesis_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonKinesisFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codeartifact_role_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeArtifactAdminAccess"
 }
 
 
 resource "aws_iam_role_policy_attachment" "dev_support_policy_attach" {
-  role       = aws_iam_role.dev_ops_role.name
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
 resource "aws_iam_policy" "dev_iam_create_policy" {
+  count      = var.enable_awldevopsrole ? 1 : 0
   name        = "dev_create_iam_policy"
   description = "Allows Devs up create IAM policies"
 
@@ -370,11 +384,13 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "dev_iam_code_services_attach" {
-  role       = aws_iam_role.dev_ops_role.name
-  policy_arn = aws_iam_policy.dev_iam_code_services_policy.arn
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
+  policy_arn = aws_iam_policy.dev_iam_code_services_policy.0.arn
 }
 
 resource "aws_iam_policy" "dev_iam_code_services_policy" {
+  count      = var.enable_awldevopsrole ? 1 : 0
   name        = "dev_iam_code_services_policy"
   description = "Allows Devs permissions from the following roles: AWSCodeCommitFullAccess"
 
@@ -551,6 +567,7 @@ POLICY
 
 
 resource "aws_iam_policy" "dev_ec2_policy" {
+  count      = var.enable_awldevopsrole ? 1 : 0
   name        = "dev_ec2_policy"
   description = "Allows Devs to perform some EC2 functions"
 
@@ -574,8 +591,8 @@ POLICY
 }
 
 resource "aws_iam_role_policy_attachment" "dev_iam_ec2_attach" {
-  role       = aws_iam_role.dev_ops_role.name
-  policy_arn = aws_iam_policy.dev_ec2_policy.arn
+  role       = aws_iam_role.dev_ops_role.0.name
+  policy_arn = aws_iam_policy.dev_ec2_policy.0.arn
 }
 
 

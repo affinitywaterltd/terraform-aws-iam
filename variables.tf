@@ -11,3 +11,8 @@ variable "local_logging_s3_bucket" {
   description = "Name of S3 bucket used for local account logging"
   default     = null
 }
+
+variable "enable_awldevopsrole" {
+  description = "Conditional creation of role"
+  default     = true
+}
