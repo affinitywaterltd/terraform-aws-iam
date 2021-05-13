@@ -50,83 +50,99 @@ resource "aws_iam_role_policy_attachment" "admin_role_policy_attach" {
 # SysOps Role
 
 resource "aws_iam_role" "sysops_role" {
+  count                 = var.enable_awlsysopsrole ? 1 : 0
   name                 = "AWLSysOpsRole"
   assume_role_policy   = data.aws_iam_policy_document.SSO_trust.json
   max_session_duration = 43200
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_read_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_ec2full_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonEC2FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_rds_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonRDSFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_amazonmq_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonMQFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_ssm_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_s3_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_support_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSBackupFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbeanstalk_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_resourcegroups_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/ResourceGroupsandTagEditorFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_elastisearch_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonElastiCacheFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_fsx_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AmazonFSxFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_datasync_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSDataSyncFullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_marketplace_policy_attach" {
-  role       = aws_iam_role.sysops_role.name
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSMarketplaceRead-only"
 }
 
