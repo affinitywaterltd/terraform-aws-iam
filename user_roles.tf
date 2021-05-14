@@ -107,13 +107,13 @@ resource "aws_iam_role_policy_attachment" "sysops_awsbackup_policy_attach" {
 resource "aws_iam_role_policy_attachment" "sysops_awslambda_policy_attach" {
   count      = var.enable_awlsysopsrole ? 1 : 0
   role       = aws_iam_role.sysops_role.0.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_awsbeanstalk_policy_attach" {
   count      = var.enable_awlsysopsrole ? 1 : 0
   role       = aws_iam_role.sysops_role.0.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AdministratorAccess-AWSElasticBeanstalk"
 }
 
 resource "aws_iam_role_policy_attachment" "sysops_resourcegroups_policy_attach" {
@@ -306,7 +306,7 @@ resource "aws_iam_role_policy_attachment" "dev_s3_role_policy_attach" {
 resource "aws_iam_role_policy_attachment" "dev_lambda_role_policy_attach" {
   count      = var.enable_awldevopsrole ? 1 : 0
   role       = aws_iam_role.dev_ops_role.0.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSLambdaFullAccess"
+  policy_arn = "arn:aws:iam::aws:policy/AWSLambda_FullAccess"
 }
 
 resource "aws_iam_role_policy_attachment" "dev_codecommit_role_policy_attach" {
