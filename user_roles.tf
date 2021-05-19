@@ -890,5 +890,5 @@ resource "aws_iam_role" "networkengineer_role" {
 
 resource "aws_iam_role_policy_attachment" "networkengineer_role_policy_attach" {
   role       = aws_iam_role.networkengineer_role.name
-  policy_arn = "arn:aws:iam::aws:policy/ReadOnlyAccess"
+  policy_arn = "arn:aws:iam::aws:policy/job-function/NetworkAdministrator"
 }
