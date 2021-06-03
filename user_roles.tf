@@ -146,6 +146,34 @@ resource "aws_iam_role_policy_attachment" "sysops_marketplace_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AWSMarketplaceRead-only"
 }
 
+resource "aws_iam_policy" "sysops_ec2_serial_console_policy" {
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  name        = "sysops_ec2_serial_console"
+  description = "Allows SysOps to use EC2 Serial Console"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowSerialConsoleAccess",
+            "Effect": "Allow",
+            "Action": [
+                "ec2-instance-connect:SendSerialConsoleSSHPublicKey"
+            ],
+            "Resource": "*"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "sysops_ec2_serial_console_attach" {
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
+  policy_arn = aws_iam_policy.sysops_ec2_serial_console_policy.0.arn
+}
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
