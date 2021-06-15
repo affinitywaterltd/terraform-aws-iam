@@ -975,5 +975,5 @@ POLICY
 
 resource "aws_iam_role_policy_attachment" "networkengineer_role_allow_flowlog_policy_attach" {
   role       = aws_iam_role.networkengineer_role.name
-  policy_arn = aws_iam_policy.allow_flowlog_filter_policy.0.arn
+  policy_arn = aws_iam_policy.allow_flowlog_filter_policy.arn
 }
