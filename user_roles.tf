@@ -174,6 +174,37 @@ resource "aws_iam_role_policy_attachment" "sysops_ec2_serial_console_attach" {
   policy_arn = aws_iam_policy.sysops_ec2_serial_console_policy.0.arn
 }
 
+
+# Allow FlowLog Filter Policy
+
+resource "aws_iam_policy" "sysops_dynamodb_full_access_policy" {
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  name        = "sysops_dynamodb_full_access"
+  description = "Allows SysOps Role to full access to DynamoDB"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowFullDynamoDBAccess",
+            "Effect": "Allow",
+            "Action": "dynamodb:*",
+            "Resource": "*"
+        }
+    ]
+}
+POLICY
+}
+
+
+resource "aws_iam_role_policy_attachment" "sysops_dynamodb_full_access_attach" {
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
+  policy_arn = aws_iam_policy.sysops_dynamodb_full_access_policy.0.arn
+}
+
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
@@ -919,4 +950,30 @@ resource "aws_iam_role" "networkengineer_role" {
 resource "aws_iam_role_policy_attachment" "networkengineer_role_policy_attach" {
   role       = aws_iam_role.networkengineer_role.name
   policy_arn = "arn:aws:iam::aws:policy/job-function/NetworkAdministrator"
+}
+
+# Allow FlowLog Filter Policy
+
+resource "aws_iam_policy" "allow_flowlog_filter_policy" {
+  name        = "allow_flowlog_filter"
+  description = "Allows Network Engineer Role to use Flow Log Filter"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "AllowFlowLogFilterAccess",
+            "Effect": "Allow",
+            "Action": "logs:FilterLogEvents",
+            "Resource": "*"
+        }
+    ]
+}
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "networkengineer_role_allow_flowlog_policy_attach" {
+  role       = aws_iam_role.sysops_role.0.name
+  policy_arn = aws_iam_policy.allow_flowlog_filter_policy.0.arn
 }
