@@ -225,6 +225,12 @@ resource "aws_iam_role_policy_attachment" "dba_athena_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "dba_ssm_policy_attach" {
+  count      = var.enable_awldatabaseanalystrole ? 1 : 0
+  role       = aws_iam_role.dba_role.0.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMFullAccess"
+}
+
 resource "aws_iam_policy" "dba_dbmigration_policy" {
   count      = var.enable_awldatabaseanalystrole ? 1 : 0
   name        = "DB_Migration_Service"
