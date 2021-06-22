@@ -180,6 +180,13 @@ resource "aws_iam_role_policy_attachment" "sysops_dynamodb_full_access_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "sysops_cloud9_access_attach" {
+  count      = var.enable_awlsysopsrole ? 1 : 0
+  role       = aws_iam_role.sysops_role.0.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
+}
+
+
 # DBA Role
 
 resource "aws_iam_role" "dba_role" {
@@ -361,22 +368,6 @@ resource "aws_iam_role_policy_attachment" "dev_apigateway_role_policy_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonAPIGatewayAdministrator"
 }
 
-/*
-resource "aws_iam_role_policy_attachment" "dev_codebuild_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeBuildAdminAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "dev_codedeploy_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodeDeployFullAccess"
-}
-
-resource "aws_iam_role_policy_attachment" "dev_codepipeline_role_policy_attach" {
-  role       = "${aws_iam_role.dev_ops_role.name}"
-  policy_arn = "arn:aws:iam::aws:policy/AWSCodePipelineFullAccess"
-}*/
-
 resource "aws_iam_role_policy_attachment" "dev_read_role_policy_attach" {
   count      = var.enable_awldevopsrole ? 1 : 0
   role       = aws_iam_role.dev_ops_role.0.name
@@ -419,11 +410,22 @@ resource "aws_iam_role_policy_attachment" "dev_codeartifact_role_policy_attach" 
   policy_arn = "arn:aws:iam::aws:policy/AWSCodeArtifactAdminAccess"
 }
 
-
 resource "aws_iam_role_policy_attachment" "dev_support_policy_attach" {
   count      = var.enable_awldevopsrole ? 1 : 0
   role       = aws_iam_role.dev_ops_role.0.name
   policy_arn = "arn:aws:iam::aws:policy/AWSSupportAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_cloudformation_policy_attach" {
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloudFormationFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "dev_kafka_policy_attach" {
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonMSKFullAccess"
 }
 
 resource "aws_iam_policy" "dev_iam_create_policy" {
@@ -661,6 +663,38 @@ resource "aws_iam_role_policy_attachment" "dev_iam_ec2_attach" {
   policy_arn = aws_iam_policy.dev_ec2_policy.0.arn
 }
 
+resource "aws_iam_policy" "dev_deny_policy" {
+  count      = var.enable_awldevopsrole ? 1 : 0
+  name        = "dev_deny_policy"
+  description = "Denies Devs up create resources"
+
+  policy = <<POLICY
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Deny",
+            "Action": [
+                "ec2:RunInstances",
+                "ecs:Create*",
+                "rds:Create*",
+                "s3:Create*",
+                "codecommit:CreateRepository",
+                "codeartifact:Create*",
+                "ecr:Create*"
+            ],
+            "Resource": "*"
+        }
+    ]
+} 
+POLICY
+}
+
+resource "aws_iam_role_policy_attachment" "dev_deny_attach" {
+  count      = var.enable_awldevopsrole ? 1 : 0
+  role       = aws_iam_role.dev_ops_role.0.name
+  policy_arn = aws_iam_policy.dev_deny_policy.0.arn
+}
 
 
 
