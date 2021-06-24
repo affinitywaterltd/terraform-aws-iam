@@ -180,10 +180,10 @@ resource "aws_iam_role_policy_attachment" "sysops_dynamodb_full_access_attach" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
-resource "aws_iam_role_policy_attachment" "sysops_cloud9_access_attach" {
+resource "aws_iam_role_policy_attachment" "sysops_cloudshell_access_attach" {
   count      = var.enable_awlsysopsrole ? 1 : 0
   role       = aws_iam_role.sysops_role.0.name
-  policy_arn = "arn:aws:iam::aws:policy/AWSCloud9User"
+  policy_arn = "arn:aws:iam::aws:policy/AWSCloudShellFullAccessr"
 }
 
 
